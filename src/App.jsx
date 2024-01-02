@@ -1,8 +1,9 @@
-import { Construction } from "./pages";
+import { Construction,Home } from "./pages";
 function App() {
   return (
     <>
       <Construction />
+      {/* <Home /> */}
     </>
   );
 }
