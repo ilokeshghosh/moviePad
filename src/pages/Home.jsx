@@ -107,15 +107,15 @@ export default function Home() {
       <div id="category" className="relative h-screen text-white pt-20">
         {/* background vectors */}
         <div>
-          <div className="absolute top-[60%] hidden xl:inline-block -left-[15%] bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
-          <div className="absolute -bottom-[10%]  z-10 hidden xl:inline-block   right-[2%] bg-center bg-no-repeat bg-cover  h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
+          <div className="absolute top-[60%] hidden xl:inline-block -left-[15%]  z-0 bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
+          <div className="absolute -bottom-[10%]  z-0  xl:inline-block   right-[2%] bg-center bg-no-repeat bg-cover  h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
         </div>
 
         {/* category section */}
-        <div className="w-full h-screen z-50  flex flex-col gap-10  ">
+        <div className="w-full h-screen z-[10] flex flex-col gap-10  ">
           {/* filter bar */}
           <div
-            className=" md:w-[80%]  bg-black  mx-auto rounded-full h-14"
+            className=" md:w-[80%]  bg-black z-50  mx-auto rounded-full h-14"
             style={{ zIndex: "" }}
           >
             <ul className="w-full flex justify-between md:px-10 px-2 gap-2 overflow-x-auto no-scrollbar  md:text-2xl text-xs items-center h-full">
@@ -162,12 +162,12 @@ export default function Home() {
           </div>
 
           {/* lower section */}
-          <div className="flex flex-wrap gap-10 md:px-10 overflow-x-auto no-scrollbar justify-between">
+          <div className="flex flex-wrap gap-10 md:px-10  overflow-x-auto no-scrollbar justify-between">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
               (index) => (
                 <div
                   key={index}
-                  className="w-[400px] h-[400px] cursor-pointer  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                  className="w-[400px] h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                   style={{
                     backgroundImage: `url(https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
                   }}
@@ -184,8 +184,8 @@ export default function Home() {
       <div id="freeToWatch" className="relative  text-white mt-52 pt-20 pb-20 md:pb-0">
         {/* background vectors */}
         <div>
-          <div className="absolute top-[60%]  xl:inline-block hidden  -left-[15%] bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
-          <div className="absolute -bottom-[10%]   z-10 xl:inline-block hidden  right-[2%] bg-center bg-no-repeat bg-cover  h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
+          <div className="absolute top-[60%]  inline-block   -left-[15%] bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
+          <div className="absolute -bottom-[10%]   z-10   right-[2%] bg-center bg-no-repeat bg-cover  h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
         </div>
 
         {/* category section */}
@@ -221,7 +221,7 @@ export default function Home() {
             {[1, 2, 3, 4, 5, 6, 7].map((index) => (
               <div
                 key={index}
-                className="w-[400px] h-[400px] cursor-pointer  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                className="w-[400px] h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                 style={{
                   backgroundImage: `url(https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
                 }}
