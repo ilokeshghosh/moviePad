@@ -10,13 +10,17 @@ export default function MovieSlider() {
   const [slides, setSlides] = useState(data);
   const [current, setCurrent] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const[imagesPerPage, setImagePerPage]= useState()
+  const [imagesPerPage, setImagePerPage] = useState(5);
+
+  const[cardWidth,setCardWidth]= useState(window.innerWidth<600? window.innerWidth:400);
   const length = slides.length;
+
   const imagesPerPageDesktop = 5;
   const imagesPerPageMobile = 1;
 
   function previous() {
     const newCurrent = current - imagesPerPage;
+
     setCurrent(newCurrent < 0 ? length - imagesPerPage : newCurrent);
   }
 
@@ -47,11 +51,15 @@ export default function MovieSlider() {
     };
   }, []);
 
+  useEffect(() => {
+    setImagePerPage(getImagesPerPage());
+    setCardWidth(window.innerWidth<600? window.innerWidth:400)
+  
+  }, [window.innerWidth]);
 
-
-
-
-useEffect(()=>{setImagePerPage(windowWidth < 600 ? 1 : 5)},[window.innerWidth])
+  useEffect(() => {
+    console.log(current);
+  }, [current]);
 
   return (
     <div className="w-full relative h-full flex  items-end ">
@@ -79,17 +87,24 @@ useEffect(()=>{setImagePerPage(windowWidth < 600 ? 1 : 5)},[window.innerWidth])
       <div className="  w-full     py-0 overflow-hidden">
         {/* image slider section */}
         <div
-          className="w-full  flex items-center      justify-between   transition-transform duration-300 ease-in-out"
+          className={`w-full  flex items-center      justify-start   transition-transform duration-1000 ease-in-out `}
           style={{
-            transform: `translateX(-${current * (100 / imagesPerPage)}%)`, // Adjust the translation based on the number of cards
+            // transform: `translateX(-${current * (100 / getImagesPerPage())}%)`, // Adjust the translation based on the number of cards
+
+
+            transform: `translateX(-${window.innerWidth<600? `${current * (100 / getImagesPerPage())}%`:''})`, // Adjust the translation based on the number of cards
+
+           
           }}
         >
           {slides.map((slide, index) => (
             <div
               key={index}
-              className={`w-[${100 / imagesPerPage}%] ${windowWidth<600 ?'w-full':''}    flex-shrink-0  flex justify-center items-center selection:bg-transparent`}
+              className={`${
+                windowWidth < 600 ? "w-full" : `w-[${100 / imagesPerPage}%]`
+              }   flex-shrink-0  flex justify-center items-center selection:bg-transparent`}
             >
-              {index >= current && index <= current + 4 && (
+              {index >= current && index <= current + imagesPerPage - 1 && (
                 <>
                   {/* image card*/}
                   <div
