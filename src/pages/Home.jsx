@@ -1,5 +1,6 @@
 import Slider from "../Components/HeroSlider";
 import MovieSlider from "../Components/MovieSlider";
+import{LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter    } from '../icons/index'
 // import "./Home.css";
 import { useState, useEffect } from "react";
 export default function Home() {
@@ -45,16 +46,16 @@ export default function Home() {
         {/* nav content */}
         <ul className="flex md:gap-10 gap-2 text-lg font-bold items-center  w-full md:w-[50%] justify-between px-5 md:px-0">
           <li>
-            <a href="#home">Home</a>
+            <a href="#home"><h1 className="hidden md:inline-block">Home</h1> <h1 className="md:hidden text-2xl"><LuHome/></h1></a>
           </li>
           <li>
-            <a href="#trending">Trending</a>
+            <a href="#trending"> <h1 className="hidden md:inline-block">Trending</h1> <h1 className="md:hidden text-2xl"><IoMdTrendingUp  /></h1></a>
           </li>
           <li>
-            <a href="#category">Category</a>
+            <a href="#category"> <h1 className="hidden md:inline-block">Category</h1> <h1 className="md:hidden text-2xl"><MdOutlineCategory   /></h1></a>
           </li>
           <li>
-            <a href="#freeToWatch">Free To Watch</a>
+            <a href="#freeToWatch"> <h1 className="hidden md:inline-block">Free To Watch</h1> <h1 className="md:hidden text-2xl"><MdOutlineMovieFilter    /></h1></a>
           </li>
         </ul>
       </nav>
@@ -198,9 +199,9 @@ export default function Home() {
               className="xl:w-[20%] md:w-[30%] w-full   bg-black z-[100]   rounded-full h-14 flex justify-center items-center"
               style={{ zIndex: "" }}
             >
-              <ul className="xl:w-[80%]  w-full  flex justify-between px-10  text-2xl items-center h-full">
+              <ul className="xl:w-[80%]  w-full  flex justify-between    text-2xl items-center h-full">
                 <li
-                  className="freeToWatch h-full w-1/2 px-6 rounded-full py-1 bg-slate-500 cursor-pointer selection:bg-transparent flex justify-center items-center"
+                  className="freeToWatch h-full w-1/2 px-6 rounded-full py-1  bg-slate-500 cursor-pointer selection:bg-transparent flex justify-center items-center"
                   onClick={handleFreeToWatch}
                 >
                   Movies

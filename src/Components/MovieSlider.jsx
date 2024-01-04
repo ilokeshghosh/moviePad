@@ -31,7 +31,7 @@ export default function MovieSlider() {
 
   function getImagesPerPage() {
     // Determine the number of images to display based on screen width
-    return window.innerWidth < 600 ? imagesPerPageMobile : imagesPerPageDesktop;
+    return window.innerWidth < 600 ? 1 : 5;
   }
 
   if (!Array.isArray(slides) || slides.length <= 0) {
@@ -57,9 +57,7 @@ export default function MovieSlider() {
   
   }, [window.innerWidth]);
 
-  useEffect(() => {
-    console.log(current);
-  }, [current]);
+
 
   return (
     <div className="w-full relative h-full flex  items-end ">
@@ -89,10 +87,10 @@ export default function MovieSlider() {
         <div
           className={`w-full  flex items-center      justify-start   transition-transform duration-1000 ease-in-out `}
           style={{
-            // transform: `translateX(-${current * (100 / getImagesPerPage())}%)`, // Adjust the translation based on the number of cards
+            transform: `translateX(-${current * (100 / getImagesPerPage())}%)`, // Adjust the translation based on the number of cards
 
 
-            transform: `translateX(-${window.innerWidth<600? `${current * (100 / getImagesPerPage())}%`:''})`, // Adjust the translation based on the number of cards
+            // transform: `translateX(-${window.innerWidth<600? `${current * (100 / getImagesPerPage())}%`:''})`, // Adjust the translation based on the number of cards
 
            
           }}
