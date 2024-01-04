@@ -1,6 +1,6 @@
 import Slider from "../Components/HeroSlider";
 import MovieSlider from "../Components/MovieSlider";
-import "./Home.css";
+// import "./Home.css";
 import { useState, useEffect } from "react";
 export default function Home() {
   function handleCategory(e) {

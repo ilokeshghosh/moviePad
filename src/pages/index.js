@@ -1,3 +1,4 @@
 import Construction from "./Construction";
 import Home from "./Home";
-export {Construction,Home}
+import Movie from "./Movie";
+export {Construction,Home,Movie}
