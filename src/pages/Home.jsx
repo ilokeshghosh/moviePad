@@ -1,9 +1,16 @@
 import Slider from "../Components/HeroSlider";
 import MovieSlider from "../Components/MovieSlider";
-import{LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter    } from '../icons/index'
+import {
+  LuHome,
+  IoMdTrendingUp,
+  MdOutlineCategory,
+  MdOutlineMovieFilter,
+} from "../icons/index";
 // import "./Home.css";
 import { useState, useEffect } from "react";
+import service from "../services/service";
 export default function Home() {
+  const [heroSlider, setHeroSlider] = useState(null);
   function handleCategory(e) {
     document.querySelectorAll(".filter").forEach((filter) => {
       filter.classList.remove(
@@ -34,8 +41,38 @@ export default function Home() {
       "bg-slate-500"
     );
   }
+
+  // api calls
+  useEffect(() => {
+    // service.nowPlaying().then((data) => {
+    //   if (data) {
+    //     setHeroSlider(data);
+    //   }
+    // });
+
+
+    // service.getMovieID("1112547").then((data) => {
+    //   console.log("data", data);
+    // });
+
+
+    // service.getUpcomingMovies().then((data)=>{
+    //   console.log('data',data);
+    // })
+
+    // service.trendingMovies().then(data=>{
+    //   console.log(data);
+    // })
+
+    service.getCategoriesList()
+
+    // const url=`https://image.tmdb.org/t/p/original/${'wwemzKWzjKYJFfCeiB57q3r4Bcm.png'}`
+    // console.log('url',url);
+  }, []);
+
   return (
-    <div id="home"
+    <div
+      id="home"
       className=" h-screen bg-slate-950 w-full overflow-y-auto no-scrollbar"
       style={{ fontFamily: "Syne,sans-serif" }}
     >
@@ -46,22 +83,46 @@ export default function Home() {
         {/* nav content */}
         <ul className="flex md:gap-10 gap-2 text-lg font-bold items-center  w-full md:w-[50%] justify-between px-5 md:px-0">
           <li>
-            <a href="#home"><h1 className="hidden md:inline-block">Home</h1> <h1 className="md:hidden text-2xl"><LuHome/></h1></a>
+            <a href="#home">
+              <h1 className="hidden md:inline-block">Home</h1>{" "}
+              <h1 className="md:hidden text-2xl">
+                <LuHome />
+              </h1>
+            </a>
           </li>
           <li>
-            <a href="#trending"> <h1 className="hidden md:inline-block">Trending</h1> <h1 className="md:hidden text-2xl"><IoMdTrendingUp  /></h1></a>
+            <a href="#trending">
+              {" "}
+              <h1 className="hidden md:inline-block">Trending</h1>{" "}
+              <h1 className="md:hidden text-2xl">
+                <IoMdTrendingUp />
+              </h1>
+            </a>
           </li>
           <li>
-            <a href="#category"> <h1 className="hidden md:inline-block">Category</h1> <h1 className="md:hidden text-2xl"><MdOutlineCategory   /></h1></a>
+            <a href="#category">
+              {" "}
+              <h1 className="hidden md:inline-block">Category</h1>{" "}
+              <h1 className="md:hidden text-2xl">
+                <MdOutlineCategory />
+              </h1>
+            </a>
           </li>
           <li>
-            <a href="#freeToWatch"> <h1 className="hidden md:inline-block">Free To Watch</h1> <h1 className="md:hidden text-2xl"><MdOutlineMovieFilter    /></h1></a>
+            <a href="#freeToWatch">
+              {" "}
+              <h1 className="hidden md:inline-block">Free To Watch</h1>{" "}
+              <h1 className="md:hidden text-2xl">
+                <MdOutlineMovieFilter />
+              </h1>
+            </a>
           </li>
         </ul>
       </nav>
 
       {/* content wrapper */}
       <div className="w-full h-screen flex items-end  text-white ">
+        {/* {heroSlider.length>0?<></>:<></>} */}
         <Slider />
       </div>
 
@@ -182,7 +243,10 @@ export default function Home() {
       </div>
 
       {/* free to Watch section */}
-      <div id="freeToWatch" className="relative  text-white mt-52 pt-20 pb-20 md:pb-0">
+      <div
+        id="freeToWatch"
+        className="relative  text-white mt-52 pt-20 pb-20 md:pb-0"
+      >
         {/* background vectors */}
         <div>
           <div className="absolute top-[60%]  inline-block   -left-[15%] bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
@@ -193,7 +257,9 @@ export default function Home() {
         <div className="w-full h-screen z-50  flex flex-col gap-10">
           {/* filter bar container */}
           <div className=" w-full items-center  justify-start flex flex-col md:flex-row md:gap-10 px-10 gap-3">
-            <h2 className=" text-4xl w-[80%] md:w-[30%] xl:w-[20%]">Free To Watch</h2>
+            <h2 className=" text-4xl w-[80%] md:w-[30%] xl:w-[20%]">
+              Free To Watch
+            </h2>
             {/* filter bar */}
             <div
               className="xl:w-[20%] md:w-[30%] w-full   bg-black z-[100]   rounded-full h-14 flex justify-center items-center"
