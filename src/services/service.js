@@ -38,7 +38,7 @@ class service {
     // coming soon content
     async getUpcomingMovies() {
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${conf.apiKey}`)
+            const response = await fetch(`https://api.themoviedb.org/3/movie/upcoming?page=1&api_key=${conf.apiKey}`)
             if (response.ok) {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
@@ -86,15 +86,14 @@ class service {
     }
 
     // search by category
-    async getMoviesListByCategories(){
+    async getMoviesListByCategories(id){
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/search/collection?query=${id}?api_key=${conf.apiKey}`)
+            const response = await fetch(`https://api.themoviedb.org/3/discover/movie?language=en-US&page=1&sort_by=popularity.desc&with_genres=${id}&api_key=${conf.apiKey}`)
             if(response.ok){
                 const contentType = response.headers.get('content-type');
                 if(contentType && contentType.includes('application/json')){
                     const data = await response.json();
-                    // console.log('data',data.genres);
-                    return data.genres;
+                    return data.results;
                 }
             }
         } catch (error) {
@@ -111,6 +110,9 @@ class service {
             console.log('error in fetching data ', error);
         }
     }
+
+    // recommanded movies
+    // https://api.themoviedb.org/3/movie/{movie_id}/similar
 }
 
 
