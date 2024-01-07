@@ -1,6 +1,6 @@
 import Slider from "../Components/HeroSlider";
 import MovieSlider from "../Components/MovieSlider";
-import { Trending, ComingSoon, HeroSection, Category } from "../Components";
+import { Trending, ComingSoon, HeroSection, Category, TopRated } from "../Components";
 import { useDispatch } from "react-redux";
 import {
   LuHome,
@@ -99,9 +99,9 @@ export default function Home() {
               </a>
             </li>
             <li>
-              <a href="#freeToWatch">
+              <a href="#topRated">
                 {" "}
-                <h1 className="hidden md:inline-block">Free To Watch</h1>{" "}
+                <h1 className="hidden md:inline-block">Top Rated</h1>{" "}
                 <h1 className="md:hidden text-2xl">
                   <MdOutlineMovieFilter />
                 </h1>
@@ -137,63 +137,8 @@ export default function Home() {
         {/* category */}
         <Category />
 
-        {/* free to Watch section */}
-        <div
-          id="freeToWatch"
-          className="relative  text-white mt-52 pt-20 pb-20 md:pb-0 "
-        >
-          {/* background vectors */}
-          <div className="">
-            <div className="absolute top-[60%]  inline-block   -left-[15%] bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
-            <div className="absolute -bottom-[10%]   z-10   right-[2%] bg-center bg-no-repeat bg-cover  h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
-          </div>
-
-          {/* category section */}
-          <div className="w-full h-screen z-50  flex flex-col gap-10">
-            {/* filter bar container */}
-            <div className=" w-full items-center  justify-start flex flex-col md:flex-row md:gap-10 px-10 gap-3">
-              <h2 className=" text-4xl w-[80%] md:w-[30%] xl:w-[20%]">
-                Free To Watch
-              </h2>
-              {/* filter bar */}
-              <div
-                className="xl:w-[20%] md:w-[30%] w-full   bg-black z-[100]   rounded-full h-14 flex justify-center items-center"
-                style={{ zIndex: "" }}
-              >
-                <ul className="xl:w-[80%]  w-full  flex justify-between    text-2xl items-center h-full">
-                  <li
-                    className="freeToWatch h-full w-1/2 px-6 rounded-full py-1  bg-slate-500 cursor-pointer selection:bg-transparent flex justify-center items-center"
-                    onClick={handleFreeToWatch}
-                  >
-                    Movies
-                  </li>
-
-                  <li
-                    className="freeToWatch h-full w-1/2 cursor-pointer selection:bg-transparent flex justify-center items-center"
-                    onClick={handleFreeToWatch}
-                  >
-                    TV
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* lower section */}
-            <div className="flex flex-wrap gap-10 md:px-10 overflow-x-auto no-scrollbar justify-between">
-              {[1, 2, 3, 4, 5, 6, 7].map((index) => (
-                <div
-                  key={index}
-                  className="w-[400px] h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
-                  style={{
-                    backgroundImage: `url(https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
-                  }}
-                >
-                  {" "}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* top to Watch section */}
+        <TopRated/>
       </div>
     );
   }

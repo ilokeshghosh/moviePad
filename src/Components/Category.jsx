@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import service from "../services/service";
+import { useDispatch } from "react-redux";
+import { TiStarFullOutline } from "../icons/index";
 export default function Category() {
-    const[movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState([]);
   const categories = useSelector((state) => state.category.category);
   function handleCategory(e, id) {
     document.querySelectorAll(".filter").forEach((filter) => {
@@ -22,31 +24,44 @@ export default function Category() {
       "bg-slate-500"
     );
 
-    service.getMoviesListByCategories(id).then((data)=>{
-        if(data){
-            setMovies(data);
-            console.log('action movie',data);
-        }
-    })
+    service.getMoviesListByCategories(id).then((data) => {
+      if (data) {
+        setMovies(data);
+      }
+    });
   }
 
-  useEffect(()=>{
-    const id=28;
-    const genre= 'Action';
-    // console.log(categories)
-    service.getMoviesListByCategories(id).then((data)=>{
-        if(data){
-            setMovies(data);
-            // console.log('action movie',data);
-        }
-    })
-  },[])
+  useEffect(() => {
+    const id = 28;
+    const genre = "Action";
+    service.getMoviesListByCategories(id).then((data) => {
+      if (data) {
+        setMovies(data);
+      }
+    });
+  }, []);
 
-//   useEffect(() => {
-//     console.log("categories", categories);
-//   }, [categories]);
+  //   useEffect(() => {
+  //     console.log("categories", categories);
+  //   }, [categories]);
 
-  if (categories.length > 0 && movies.length>0) {
+  function getGenreName(arrayIds) {
+    const result = [];
+    if (categories) {
+      arrayIds.forEach((id) => {
+        const data = categories.find((genre) => {
+          if (genre.id === id) {
+            return genre.name;
+          }
+        });
+
+        result.push(data);
+      });
+    }
+    return result;
+  }
+
+  if (categories.length > 0 && movies.length > 0) {
     return (
       <div id="category" className="relative h-screen text-white pt-20 ">
         {/* background vectors */}
@@ -79,20 +94,65 @@ export default function Category() {
 
           {/* lower section */}
           <div className="flex flex-wrap gap-10 md:px-10  overflow-x-auto no-scrollbar justify-between">
-            {movies.map(
-              (movie,index) => (
+            {movies.map((movie, index) => (
+              <div
+                key={index}
+                className="w-[400px] h-[400px] cursor-pointer mx-auto hover:scale-110 transition-all ease-linear duration-200  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                style={{
+                  // backgroundImage: `url(https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
+                  backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
+                }}
+              >
+                {" "}
+                {/* card cover shadow filter */}
                 <div
-                  key={index}
-                  className="w-[400px] h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                  className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
                   style={{
-                    // backgroundImage: `url(https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
-                    backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
+                    boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
                   }}
-                >
-                  {" "}
+                ></div>
+                {/* card content */}
+                <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
+                  {/* upper section */}
+                  <div className="w-full flex  justify-start items-center ">
+                    {/* rating section */}
+                    <div className="relative">
+                      {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
+                      <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
+                      {/* </TiStarFullOutline> */}
+                      <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
+                        {movie.vote_average.toFixed(1)}
+                      </h2>
+                    </div>
+                  </div>
+
+                  {/* lower section */}
+                  <div className="flex flex-col w-full  justify-start items-start gap-2 ">
+                    {/* name */}
+                    <h1 className="w-full text-2xl font-bold">{movie.title}</h1>
+
+                    <h2>{`${
+                      new Date(movie.release_date).getDay() < 10 ? "0" : ""
+                    }${new Date(movie.release_date).getDay()} / ${
+                      new Date(movie.release_date).getMonth() < 10 ? "0" : ""
+                    } ${new Date(movie.release_date).getMonth()}/${new Date(
+                      movie.release_date
+                    ).getFullYear()}`}</h2>
+
+                    {/* genres */}
+                    <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                      {getGenreName(movie.genre_ids).map((genre) => (
+                        <h2 key={genre.id}>{genre.name}</h2>
+                      ))}
+                    </div>
+
+                    <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                      {movie.original_language}
+                    </h2>
+                  </div>
                 </div>
-              )
-            )}
+              </div>
+            ))}
           </div>
         </div>
       </div>

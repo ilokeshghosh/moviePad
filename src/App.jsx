@@ -3,8 +3,8 @@ function App() {
   return (
     <>
       <Construction />
-
-      {/* <Home /> */}
+{/* 
+      <Home /> */}
       {/* <Movie/> */}
     </>
   );

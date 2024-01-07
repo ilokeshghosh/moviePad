@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "../icons";
 import { data } from "./data";
 import service from "../services/service";
-export default function HeroSlider({sliderData}) {
+export default function HeroSlider({ sliderData }) {
   const [slides, setSlides] = useState(sliderData);
   const [current, setCurrent] = useState(0);
 
@@ -21,8 +21,6 @@ export default function HeroSlider({sliderData}) {
   // useEffect(()=>{
   //  console.log('sliderdata',sliderData);
   // },[slides])
-
-
 
   if (slides.length > 0) {
     return (
@@ -63,12 +61,15 @@ export default function HeroSlider({sliderData}) {
                     <div
                       className="w-full md:h-[400px] h-[300px]    z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9 "
                       // style={{ backgroundImage: `url(${slide.url})` }}
-                      style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.poster_path})` }}
+                      style={{
+                        backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.poster_path})`,
+                      }}
                     >
-                      <div className="absolute hidden w-full h-full top-0 left-0 bg-slate-800/40 z-[-1]"></div>
-                      {" "}
+                      <div className="absolute hidden w-full h-full top-0 left-0 bg-slate-800/40 z-[-1]"></div>{" "}
                       {/*title  */}
-                      <h2 className="text-4xl font-bold w-full text-center hidden">{slide.title}</h2>
+                      <h2 className="text-4xl font-bold w-full text-center hidden">
+                        {slide.title}
+                      </h2>
                       <button className="bg-red-700 px-6 py-2 rounded-lg text-xl font-bold hidden">
                         Click Me
                       </button>

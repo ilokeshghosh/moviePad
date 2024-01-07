@@ -4,16 +4,22 @@ import {
   FaChevronRight,
   AiOutlineSwapLeft,
   AiOutlineSwapRight,
+  TiStarFullOutline,
 } from "../icons";
 import { data } from "./data";
-export default function MovieSlider({slideData}) {
+import { useDispatch, useSelector } from "react-redux";
+export default function MovieSlider({ slideData }) {
+  const genresList = useSelector((state) => state.category.category);
+
   // const [slides, setSlides] = useState(data);
   const [slides, setSlides] = useState(slideData);
   const [current, setCurrent] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [imagesPerPage, setImagePerPage] = useState(5);
 
-  const[cardWidth,setCardWidth]= useState(window.innerWidth<600? window.innerWidth:400);
+  const [cardWidth, setCardWidth] = useState(
+    window.innerWidth < 600 ? window.innerWidth : 400
+  );
   // const length = slides.length;
 
   const imagesPerPageDesktop = 5;
@@ -54,16 +60,33 @@ export default function MovieSlider({slideData}) {
 
   useEffect(() => {
     setImagePerPage(getImagesPerPage());
-    setCardWidth(window.innerWidth<600? window.innerWidth:400)
-  
+    setCardWidth(window.innerWidth < 600 ? window.innerWidth : 400);
   }, [window.innerWidth]);
 
+  function getGenreName(arrayIds) {
+    const result = [];
+    if (genresList) {
+      arrayIds.forEach((id) => {
+        const data = genresList.find((genre) => {
+          if (genre.id === id) {
+            return genre.name;
+          }
+        });
 
-  useEffect(()=>{
-    // console.log('slides data are',slides);
-  },[slides])
+        result.push(data);
+      });
+    }
+    return result;
+  }
 
-  if(slides.length>0){
+  useEffect(() => {
+    // console.log('est',slides);
+    // slides.map((slide)=>{
+    //   console.log('slide',new Date(slide.release_date).getDay());
+    // })
+  }, [slides]);
+
+  if (slides.length > 0) {
     return (
       <div className="w-full relative h-full flex  items-end ">
         {/* buttons */}
@@ -76,28 +99,30 @@ export default function MovieSlider({slideData}) {
             <h2 className="text-xl">Next</h2>
             <AiOutlineSwapRight className="text-4xl" />
           </div>
-  
+
           {/* previous */}
           <div
             className=" flex  justify-center items-center cursor-pointer selection:bg-transparent"
             onClick={previous}
           >
-            <AiOutlineSwapLeft className="text-4xl" />
+            <AiOutlineSwapLeft
+              className="text-4xl "
+              style={{ transform: "rotateX(180deg)" }}
+            />
             <h2 className="text-xl">Previous</h2>
           </div>
         </div>
         {/* image slider container*/}
-        <div className="  w-full     py-0 overflow-hidden">
+        <div className="  w-full     py-0 ">
           {/* image slider section */}
           <div
             className={`w-full  flex items-center      justify-start   transition-transform duration-1000 ease-in-out `}
             style={{
-              transform: `translateX(-${current * (100 / getImagesPerPage())}%)`, // Adjust the translation based on the number of cards
-  
-  
+              transform: `translateX(-${
+                current * (100 / getImagesPerPage())
+              }%)`, // Adjust the translation based on the number of cards
+
               // transform: `translateX(-${window.innerWidth<600? `${current * (100 / getImagesPerPage())}%`:''})`, // Adjust the translation based on the number of cards
-  
-             
             }}
           >
             {slides.map((slide, index) => (
@@ -111,11 +136,69 @@ export default function MovieSlider({slideData}) {
                   <>
                     {/* image card*/}
                     <div
-                      className="md:w-[400px] w-screen  h-[400px]     z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                      className="md:w-[400px] w-screen  h-[400px]  hover:scale-110 transition-all ease-linear duration-200   z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                       // style={{ backgroundImage: `url(${slide.url})` }}
-                      style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.backdrop_path})` }}
+                      style={{
+                        backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.backdrop_path})`,
+                      }}
                     >
                       {" "}
+                      {/* card cover shadow filter */}
+                      <div
+                        className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
+                        style={{
+                          boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
+                        }}
+                      ></div>
+                      
+                      {/* card content */}
+                      <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
+                        {/* upper section */}
+                        <div className="w-full flex  justify-start items-center ">
+                          {/* rating section */}
+                          <div className="relative">
+                            {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
+                            <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
+                            {/* </TiStarFullOutline> */}
+                            <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
+                              {slide.vote_average.toFixed(1)}
+                            </h2>
+                          </div>
+                        </div>
+
+                        {/* lower section */}
+                        <div className="flex flex-col w-full  justify-start items-start gap-2 ">
+                          {/* name */}
+                          <h1 className="w-full text-2xl font-bold">
+                            {slide.title}
+                          </h1>
+
+                          <h2>{`${
+                            new Date(slide.release_date).getDay() < 10
+                              ? "0"
+                              : ""
+                          }${new Date(slide.release_date).getDay()} / ${
+                            new Date(slide.release_date).getMonth() < 10
+                              ? "0"
+                              : ""
+                          } ${new Date(
+                            slide.release_date
+                          ).getMonth()}/${new Date(
+                            slide.release_date
+                          ).getFullYear()}`}</h2>
+
+                          {/* genres */}
+                          <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                            {getGenreName(slide.genre_ids).map((genre) => (
+                              <h2 key={genre.id}>{genre.name}</h2>
+                            ))}
+                          </div>
+
+                          <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                            {slide.original_language}
+                          </h2>
+                        </div>
+                      </div>
                     </div>
                   </>
                 )}
@@ -126,5 +209,4 @@ export default function MovieSlider({slideData}) {
       </div>
     );
   }
-  
 }

@@ -5,4 +5,5 @@ import { LuHome } from "react-icons/lu";
 import { IoMdTrendingUp } from "react-icons/io";
 import { MdOutlineCategory } from "react-icons/md";
 import { MdOutlineMovieFilter } from "react-icons/md";
-export {FaChevronLeft,FaChevronRight,AiOutlineSwapRight,AiOutlineSwapLeft,FaArrowDownLong,LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter     };
+import { TiStarFullOutline } from "react-icons/ti";
+export {FaChevronLeft,FaChevronRight,AiOutlineSwapRight,AiOutlineSwapLeft,FaArrowDownLong,LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter,TiStarFullOutline};
