@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import service from "../services/service";
 import { useDispatch } from "react-redux";
 import { TiStarFullOutline } from "../icons/index";
+import { Link } from "react-router-dom";
 export default function Category() {
   const [movies, setMovies] = useState([]);
   const categories = useSelector((state) => state.category.category);
@@ -95,7 +96,8 @@ export default function Category() {
           {/* lower section */}
           <div className="flex flex-wrap gap-10 md:px-10  overflow-x-auto no-scrollbar justify-between">
             {movies.map((movie, index) => (
-              <div
+              <Link
+                to={`/movie/${movie.id}`}
                 key={index}
                 className="w-[400px] h-[400px] cursor-pointer mx-auto hover:scale-110 transition-all ease-linear duration-200  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                 style={{
@@ -151,7 +153,7 @@ export default function Category() {
                     </h2>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

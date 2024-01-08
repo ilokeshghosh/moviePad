@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import service from "../services/service";
 import { TiStarFullOutline } from "../icons/index";
+import { Link } from "react-router-dom";
 
 export default function TopRated() {
   const genresList = useSelector((state) => state.category.category);
+  const[type,setType] = useState()
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   function handleFreeToWatch(e, name) {
     document.querySelectorAll(".freeToWatch").forEach((filter) => {
@@ -19,7 +21,9 @@ export default function TopRated() {
 
     service.topRated(name).then((data) => {
       if (data) {
+        console.log('data from top reated',data);
         setTopRatedMovies(data);
+        setType(name);
       }
     });
   }
@@ -28,10 +32,15 @@ export default function TopRated() {
     const name = "movie";
     service.topRated(name).then((data) => {
       if (data) {
+        setType('movie')
         setTopRatedMovies(data);
       }
     });
   }, []);
+
+  useEffect(()=>{
+    console.log('type',type)
+  },[type])
 
   function getGenreName(arrayIds) {
     const result = [];
@@ -93,7 +102,8 @@ export default function TopRated() {
           {/* lower section */}
           <div className="flex flex-wrap gap-10 md:px-10 overflow-x-auto no-scrollbar justify-between">
             {topRatedMovies.map((data, index) => (
-              <div
+              <Link
+                to={`${type ==='movie' ? `/movie/${data.id}`:`/tv/${data.id}`}`}
                 key={index}
                 className="w-[400px] h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                 style={{
@@ -152,7 +162,7 @@ export default function TopRated() {
                     </h2>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

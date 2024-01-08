@@ -8,6 +8,7 @@ import {
 } from "../icons";
 import { data } from "./data";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 export default function MovieSlider({ slideData }) {
   const genresList = useSelector((state) => state.category.category);
 
@@ -134,9 +135,78 @@ export default function MovieSlider({ slideData }) {
               >
                 {index >= current && index <= current + imagesPerPage - 1 && (
                   <>
+
+                    <Link 
+                    className="md:w-[400px] w-screen  h-[400px]  hover:scale-110 transition-all ease-linear duration-200   z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9" 
+                    to={`/movie/${slide.id}`}
+                    style={{
+                      backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.backdrop_path})`,
+                    }}
+                    >
+
+                       {/* card cover shadow filter */}
+                       <div
+                        className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
+                        style={{
+                          boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
+                        }}
+                      ></div>
+                      
+                      {/* card content */}
+                      <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
+                        {/* upper section */}
+                        <div className="w-full flex  justify-start items-center ">
+                          {/* rating section */}
+                          <div className="relative">
+                            {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
+                            <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
+                            {/* </TiStarFullOutline> */}
+                            <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
+                              {slide.vote_average.toFixed(1)}
+                            </h2>
+                          </div>
+                        </div>
+
+                        {/* lower section */}
+                        <div className="flex flex-col w-full  justify-start items-start gap-2 ">
+                          {/* name */}
+                          <h1 className="w-full text-2xl font-bold">
+                            {slide.title}
+                          </h1>
+
+                          <h2>{`${
+                            new Date(slide.release_date).getDay() < 10
+                              ? "0"
+                              : ""
+                          }${new Date(slide.release_date).getDay()} / ${
+                            new Date(slide.release_date).getMonth() < 10
+                              ? "0"
+                              : ""
+                          } ${new Date(
+                            slide.release_date
+                          ).getMonth()}/${new Date(
+                            slide.release_date
+                          ).getFullYear()}`}</h2>
+
+                          {/* genres */}
+                          <div className="flex gap-4 items-center text-xs w-full font-bold">
+                            {getGenreName(slide.genre_ids).map((genre) => (
+                              <h2 key={genre.id}>{genre.name}</h2>
+                            ))}
+                          </div>
+
+                          <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                            {slide.original_language}
+                          </h2>
+                        </div>
+                      </div>
+
+                    </Link>
+
+
                     {/* image card*/}
                     <div
-                      className="md:w-[400px] w-screen  h-[400px]  hover:scale-110 transition-all ease-linear duration-200   z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                      className="md:w-[400px] w-screen hidden  h-[400px]  hover:scale-110 transition-all ease-linear duration-200   z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                       // style={{ backgroundImage: `url(${slide.url})` }}
                       style={{
                         backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.backdrop_path})`,
@@ -199,6 +269,7 @@ export default function MovieSlider({ slideData }) {
                           </h2>
                         </div>
                       </div>
+
                     </div>
                   </>
                 )}

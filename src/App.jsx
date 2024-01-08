@@ -1,11 +1,10 @@
-import { Construction,Home,Movie } from "./pages";
+import { Construction, Home, Movie } from "./pages";
 function App() {
+  
   return (
     <>
-      <Construction />
-{/* 
-      <Home /> */}
-      {/* <Movie/> */}
+      {/* <Construction /> */}
+      <Home />
     </>
   );
 }

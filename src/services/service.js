@@ -19,9 +19,9 @@ class service {
     }
 
 
-    async getMovieID(id) {
+    async getMovieByID(id) {
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${conf.apiKey}`)
+            const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=${conf.apiKey}`)
             if (response.ok) {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
@@ -29,11 +29,60 @@ class service {
                     return data;
                 }
             }
-
         } catch (error) {
             console.log('error in fetching data ', error);
         }
     }
+    async getTvByID(id) {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US&api_key=${conf.apiKey}`)
+            if (response.ok) {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
+                    return data;
+                }
+            }
+        } catch (error) {
+            console.log('error in fetching data ', error);
+        }
+    }
+
+    async getMovieVideo(id) {
+        // https://api.themoviedb.org/3/movie/{movie_id}/videos
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${conf.apiKey}`)
+            if (response.ok) {
+                const contentType = response.headers.get('content-type')
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json()
+                    console.log('data at service', data);
+                    return data.results;
+                }
+            }
+        } catch (error) {
+            console.log('error is ', error)
+        }
+    }
+
+    async getTvVideo(id) {
+        // https://api.themoviedb.org/3/movie/{movie_id}/videos
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/videos?api_key=${conf.apiKey}`)
+            if (response.ok) {
+                const contentType = response.headers.get('content-type')
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json()
+                    console.log('data at service', data);
+                    return data.results;
+                }
+            }
+        } catch (error) {
+            console.log('error is ', error)
+        }
+    }
+
+
 
     // coming soon content
     async getUpcomingMovies() {
