@@ -4,9 +4,12 @@ import service from "../services/service";
 import { useDispatch } from "react-redux";
 import { TiStarFullOutline } from "../icons/index";
 import { Link } from "react-router-dom";
+// import { useDispatch } from "react-redux";
+import { setMovieCategory } from "../store/categorySlice";
 export default function Category() {
+  const dispatch = useDispatch();
   const [movies, setMovies] = useState([]);
-  const categories = useSelector((state) => state.category.category);
+  const categories = useSelector((state) => state.categories.movieCategory);
   function handleCategory(e, id) {
     document.querySelectorAll(".filter").forEach((filter) => {
       filter.classList.remove(
@@ -42,9 +45,32 @@ export default function Category() {
     });
   }, []);
 
-  //   useEffect(() => {
-  //     console.log("categories", categories);
-  //   }, [categories]);
+  useEffect(() => {
+    if (categories.length<=0) {
+      try {
+        const localMovieCategory = localStorage.getItem("movieGenres");
+        if (localMovieCategory) {
+          const movieCategory = JSON.parse(localMovieCategory);
+          if (movieCategory) {
+            dispatch(setMovieCategory(movieCategory));
+          }else{
+            console.log('invalid data');
+          }
+        } else {
+          // api call
+          service.getMovieCategoriesList().then(data=>{
+            if(data){
+              dispatch(setMovieCategory(data))
+              localStorage.setItem('movieGenres',JSON.stringify(data));
+            }
+          })
+
+        }
+      } catch (error) {
+        console.log('error in category Component',)
+      }
+    }
+  }, []);
 
   function getGenreName(arrayIds) {
     const result = [];
@@ -99,7 +125,7 @@ export default function Category() {
               <Link
                 to={`/movie/${movie.id}`}
                 key={index}
-                className="w-[400px] h-[400px] cursor-pointer mx-auto hover:scale-110 transition-all ease-linear duration-200  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                className="w-[400px] h-[400px] cursor-pointer mx-auto hover:scale-110 transition-all ease-linear duration-300  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                 style={{
                   // backgroundImage: `url(https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
                   backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
@@ -113,6 +139,7 @@ export default function Category() {
                     boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
                   }}
                 ></div>
+
                 {/* card content */}
                 <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
                   {/* upper section */}

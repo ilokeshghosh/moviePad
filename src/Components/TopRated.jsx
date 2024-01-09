@@ -3,10 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import service from "../services/service";
 import { TiStarFullOutline } from "../icons/index";
 import { Link } from "react-router-dom";
+import { setMovieCategory, setTvCategory } from "../store/categorySlice";
 
 export default function TopRated() {
-  const genresList = useSelector((state) => state.category.category);
-  const[type,setType] = useState()
+  const movieGenresList = useSelector(
+    (state) => state.categories.movieCategory
+  );
+  const tvGenresList = useSelector((state) => state.categories.tvCategory);
+
+  const [type, setType] = useState();
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   function handleFreeToWatch(e, name) {
     document.querySelectorAll(".freeToWatch").forEach((filter) => {
@@ -21,7 +26,6 @@ export default function TopRated() {
 
     service.topRated(name).then((data) => {
       if (data) {
-        console.log('data from top reated',data);
         setTopRatedMovies(data);
         setType(name);
       }
@@ -32,28 +36,91 @@ export default function TopRated() {
     const name = "movie";
     service.topRated(name).then((data) => {
       if (data) {
-        setType('movie')
+        setType("movie");
         setTopRatedMovies(data);
       }
     });
   }, []);
 
-  useEffect(()=>{
-    console.log('type',type)
-  },[type])
+  // checking for movie genres list
+  useEffect(() => {
+    if (movieGenresList.length<=0) {
+      try {
+        const localMovieCategory = localStorage.getItem("movieGenres");
+        if (localMovieCategory) {
+          const movieCategory = JSON.parse(localMovieCategory);
+          if (movieCategory) {
+            dispatch(setMovieCategory(movieCategory));
+          } else {
+            console.log("invalid data");
+          }
+        } else {
+          // api call
+          service.getMovieCategoriesList().then((data) => {
+            if (data) {
+              dispatch(setMovieCategory(data));
+              localStorage.setItem("movieGenres", JSON.stringify(data));
+            }
+          });
+        }
+      } catch (error) {
+        console.log("error in category Component");
+      }
+    }
+  }, []);
+
+  // checking for tv genres list
+  useEffect(() => {
+    if (tvGenresList.length<=0) {
+      try {
+        const localTvCategory = localStorage.getItem("tvGenres");
+        if (localTvCategory) {
+          const tvCategory = JSON.parse(localTvCategory);
+          if (tvCategory) {
+            dispatch(setTvCategory(tvCategory));
+          } else {
+            console.log("invalid data");
+          }
+        } else {
+          // api call
+          service.getTvCategoriesList().then((data) => {
+            if (data) {
+              dispatch(setTvCategory(data));
+              localStorage.setItem("tvGenres", JSON.stringify(data));
+            }
+          });
+        }
+      } catch (error) {
+        console.log("error in category Component");
+      }
+    }
+  }, []);
+
+
 
   function getGenreName(arrayIds) {
     const result = [];
-    if (genresList) {
+    if (tvGenresList && movieGenresList) {
       arrayIds.forEach((id) => {
-        const data = genresList.find((genre, index) => {
-          if (genre.id === id && genre.name) {
-            result.push(genre.name);
-          }
-        });
+        type === "tv"
+          ? tvGenresList.map((genre, index) => {
+              if (genre.id === id && genre.name) {
+                result.push(genre.name);
+              }
+            })
+          : movieGenresList.map((genre, index) => {
+              if (genre.id === id && genre.name) {
+                result.push(genre.name);
+              }
+            });
+
+        // const data = genresList.find((genre, index) => {
+        //   if (genre.id === id && genre.name) {
+        //     result.push(genre.name);
+        //   }
+        // });
       });
     }
-    // console.log('result',result);
     return result;
   }
 
@@ -103,7 +170,9 @@ export default function TopRated() {
           <div className="flex flex-wrap gap-10 md:px-10 overflow-x-auto no-scrollbar justify-between">
             {topRatedMovies.map((data, index) => (
               <Link
-                to={`${type ==='movie' ? `/movie/${data.id}`:`/tv/${data.id}`}`}
+                to={`${
+                  type === "movie" ? `/movie/${data.id}` : `/tv/${data.id}`
+                }`}
                 key={index}
                 className="w-[400px] h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                 style={{
@@ -140,14 +209,34 @@ export default function TopRated() {
                       {data.title || data.name}
                     </h1>
                     {/* first_air_date */}
-                    <h2>{`
-                      ${new Date(data.release_date).getDay() || new Date(data.first_air_date).getDate()  < 10? "0": ""}${new Date(data.release_date ).getDay() || new Date(data.first_air_date).getDate()} 
+                    <h2>
+                      {`
+                      ${
+                        new Date(data.release_date).getDay() ||
+                        new Date(data.first_air_date).getDate() < 10
+                          ? "0"
+                          : ""
+                      }${
+                        new Date(data.release_date).getDay() ||
+                        new Date(data.first_air_date).getDate()
+                      } 
                       
                       / 
-                      ${new Date(data.release_date).getMonth() || new Date(data.first_air_date).getMonth()+1 < 10? "0": ""}${new Date(data.release_date).getMonth() || new Date(data.first_air_date).getMonth()+1}
+                      ${
+                        new Date(data.release_date).getMonth() ||
+                        new Date(data.first_air_date).getMonth() + 1 < 10
+                          ? "0"
+                          : ""
+                      }${
+                        new Date(data.release_date).getMonth() ||
+                        new Date(data.first_air_date).getMonth() + 1
+                      }
                       
                       /
-                      ${new Date(data.release_date).getFullYear() || new Date(data.first_air_date).getFullYear()}`}
+                      ${
+                        new Date(data.release_date).getFullYear() ||
+                        new Date(data.first_air_date).getFullYear()
+                      }`}
                     </h2>
 
                     {/* genres */}

@@ -3,16 +3,20 @@ import { FaArrowDownLong } from "../icons";
 import { data } from "../Components/data";
 import { useParams } from "react-router-dom";
 import service from "../services/service";
+import { setTvCategory } from "../store/categorySlice";
+import { useSelector, useDispatch } from "react-redux";
 export default function Movie() {
   const { seriesID } = useParams();
   const [series, setSeries] = useState([]);
   const [videoId, setVideoId] = useState();
+  const dispatch = useDispatch();
+  const genresList = useSelector((state) => state.categories.tvCategory);
 
   useEffect(() => {
     const tempId = "603692";
     service.getTvByID(seriesID).then((data) => {
-      console.log('series data',data)
-      if(data){
+      console.log("series data", data);
+      if (data) {
         setSeries([data]);
       }
     });
@@ -31,28 +35,71 @@ export default function Movie() {
         // console.log(new Date(data.release_date).toLocaleString('default', {month:'long'}));
 
         console.log(data);
-
-
       });
       // console.log(`https://image.tmdb.org/t/p/original/${movie[0].backdrop_path}`)
       // console.log(movie[0].backdrop_path)
       // movie[0]
 
-      service.getTvVideo(seriesID).then((videos)=>{
-          videos.map((video)=>{
-            if(video.name === 'Official Trailer' || video.name.includes('Official Trailer') || video.name.includes('Trailer')){
-              setVideoId(video.key);
-            }
-          })
-      })
+      service.getTvVideo(seriesID).then((videos) => {
+        videos.map((video) => {
+          if (
+            video.name === "Official Trailer" ||
+            video.name.includes("Official Trailer") ||
+            video.name.includes("Trailer")
+          ) {
+            setVideoId(video.key);
+          }
+        });
+      });
     }
   }, [series]);
 
-  useEffect(()=>{
-    console.log('video id',videoId)
-  },[videoId])
+  useEffect(() => {
+    console.log("video id", videoId);
+  }, [videoId]);
 
-  if (series.length > 0 ) {
+  useEffect(() => {
+    if (genresList.length<=0) {
+      try {
+        const localTvCategory = localStorage.getItem("tvGenres");
+        if (localTvCategory) {
+          const tvCategory = JSON.parse(localTvCategory);
+          if (tvCategory) {
+            dispatch(setTvCategory(tvCategory));
+          } else {
+            console.log("invalid data");
+          }
+        } else {
+          // api call
+          service.getTvCategoriesList().then((data) => {
+            if (data) {
+              dispatch(setTvCategory(data));
+              localStorage.setItem("tvGenres", JSON.stringify(data));
+            }
+          });
+        }
+      } catch (error) {
+        console.log("error in Tv page", error);
+      }
+    }
+  }, []);
+
+  function getGenreName(arrayIds) {
+    const result = [];
+    if (genresList) {
+
+      for(let i=0;i<arrayIds.length;i++ ){
+        for(let j=0;j<genresList.length;j++){
+          if(genresList[j].id ===  arrayIds[i].id){
+            result.push(genresList[j].name)
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  if (series.length > 0) {
     return (
       <div
         className="bg-slate-950 z-0 relative overflow-x-hidden no-scrollbar"
@@ -65,119 +112,139 @@ export default function Movie() {
           <div className="absolute top-[50%]   z-[-1]  -left-[3%]  bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
         </div>
 
-        {series.map((data,index)=>(<div key={index} className="w-full">
-        <div
-          className={`bg-center bg-cover bg-no-repeat h-screen text-white md:py-6  md:px-32 px-0 relative pb-10 md:pb-0`}
-          style={{
-            backgroundImage:`url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
-            boxShadow: "inset 0px -120px 100px 0px rgb(2 6 23)",
-          }}
-        >
-          {/* cover */}
-          <div className="absolute top-0 left-0 w-full h-full bg-black/3 0 z-0 "></div>
+        {series.map((data, index) => (
+          <div key={index} className="w-full">
+            <div
+              className={`bg-center bg-cover bg-no-repeat h-screen text-white md:py-6  md:px-32 px-0 relative pb-10 md:pb-0`}
+              style={{
+                backgroundImage: `url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
+                boxShadow: "inset 0px -120px 100px 0px rgb(2 6 23)",
+              }}
+            >
+              {/* cover */}
+              <div className="absolute top-0 left-0 w-full h-full bg-black/3 0 z-0 "></div>
 
-          {/* cover */}
-          <div
-            className=" h-[15%]   left-0 absolute bottom-0  w-full z-[20]"
-            style={{ boxShadow: "inset 0px -30px 70px 0px rgb(2 6 23)" }}
-          ></div>
+              {/* cover */}
+              <div
+                className=" h-[15%]   left-0 absolute bottom-0  w-full z-[20]"
+                style={{ boxShadow: "inset 0px -30px 70px 0px rgb(2 6 23)" }}
+              ></div>
 
-          {/* scroll down button */}
-          <div className="absolute bottom-[36%]  left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
-            <FaArrowDownLong />
-          </div>
+              {/* scroll down button */}
+              <div className="absolute bottom-[36%]  left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
+                <FaArrowDownLong />
+              </div>
 
-          {/* content section */}
-          <div className="absolute top-0 left-0 w-full h-full md:px-20 px-0">
-            {/* upper section /title*/}
-            <div className="w-full md:text-start  text-center   md:pt-10 pt-4 h-1/3 ">
-              {/* title */}
-              <h1 className="md:text-[6rem] text-[4rem] font-bold ">
-                {data.original_name}
-              </h1>
+              {/* content section */}
+              <div className="absolute top-0 left-0 w-full h-full md:px-20 px-0">
+                {/* upper section /title*/}
+                <div className="w-full md:text-start  text-center   md:pt-10 pt-4 h-1/3 ">
+                  {/* title */}
+                  <h1 className="md:text-[6rem] text-[4rem] font-bold ">
+                    {data.name}
+                  </h1>
+                </div>
+
+                {/* mid section / data and stars */}
+                <div className="w-full flex justify-between md:items-center items-start px-5 md:py-10 py-0 z-50 h-1/3 ">
+                  {/* left / date and time*/}
+                  <div className="w-1/2 flex flex-col justify-start items-start">
+                    {/* in theatres text */}
+                    <h3 className="text-2xl ">first air on</h3>
+                    {/* month and year */}
+                    <div className="px-4 flex flex-col justify-between items-center text-4xl font-semibold">
+                      {/* month */}
+                      <h2>
+                        {new Date(data.first_air_date).toLocaleString(
+                          "default",
+                          { month: "long" }
+                        )}
+                      </h2>
+                      <h2>{new Date(data.first_air_date).getFullYear()}</h2>
+                    </div>
+                  </div>
+
+                  {/* right/stars */}
+                  <div className="1/2 flex flex-col items-start gap-2">
+                    <h3 className="text-xl font-semibold ">STARRING</h3>
+                    <ul className="px-2 text-lg">
+                      <li className="">Actor 1</li>
+                      <li>Actor 2</li>
+                      <li>Actor 3</li>
+                      <li>Actor 4</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* lower section / button and movie desc */}
+                <div className="flex justify-start md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
+                  {/* trailer section */}
+                  <div className="w-[20%] md:w-[5%]">
+                    <button className="border px-4 rounded-xl ">
+                      <a href="#trailer">Trailer</a>{" "}
+                    </button>
+                  </div>
+
+                  {/* movie information */}
+                  <div
+                    className={`md:w-[40%]  w-[90%] text-center mx-auto overflow-y-auto no-scrollbar  relative `}
+                  >
+                    <h3 className="text-2xl font-light "> {data.overview}</h3>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* mid section / data and stars */}
-            <div className="w-full flex justify-between md:items-center items-start px-5 md:py-10 py-0 z-50 h-1/3 ">
-              {/* left / date and time*/}
-              <div className="w-1/2 flex flex-col justify-start items-start">
-                {/* in theatres text */}
-                <h3 className="text-2xl ">first air on</h3>
-                {/* month and year */}
-                <div className="px-4 flex flex-col justify-between items-center text-4xl font-semibold">
-                  {/* month */}
-                  <h2>{new Date(data.first_air_date).toLocaleString('default', {month:'long'})}</h2>
-                  <h2>{new Date(data.first_air_date).getFullYear()}</h2>
+            {/* trailer section */}
+            <div
+              id="trailer"
+              className="h-screen  text-white md:py-1 py-20 flex flex-col  md:gap-4 gap-24  relative z-[0]"
+              style={{ fontFamily: "Syne,sans-serif" }}
+            >
+              {/* upper section */}
+              <div className="flex flex-col  items-center md:gap-2  md:py-8 py-3 z-[10]">
+                <h1 className="md:text-6xl text-3xl font-semibold text-center md:text-start">
+                  {data.name}
+                </h1>
+                {/* tags and content */}
+                <div className="flex md:gap-10 gap-2 flex-col md:flex-row  md:justify-center justify-between  items-center w-full ">
+                  <h2 className="bg-slate-500 md:px-6  px-2 rounded-md">
+                    {data.original_language}
+                  </h2>
+                  <h3>
+                    {new Date(data.first_air_date).toLocaleDateString()} to{" "}
+                    {new Date(data.last_air_date).toLocaleDateString()}
+                  </h3>
+
+                  {/* <h3>Action,Science,Fiction</h3> */}
+                  <div className="flex gap-3">
+                    {" "}
+                    {getGenreName(data.genres).map((genre,index) => (
+                      <h2 key={index}>{genre}</h2>
+                    ))}
+                  </div>
+
+                  <h3>
+                    {data.number_of_seasons} Seasons, {data.number_of_episodes}{" "}
+                    Episodes{" "}
+                  </h3>
+                  <h3>Status:{data.status}</h3>
                 </div>
               </div>
 
-              {/* right/stars */}
-              <div className="1/2 flex flex-col items-start gap-2">
-                <h3 className="text-xl font-semibold ">STARRING</h3>
-                <ul className="px-2 text-lg">
-                  <li className="">Actor 1</li>
-                  <li>Actor 2</li>
-                  <li>Actor 3</li>
-                  <li>Actor 4</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* lower section / button and movie desc */}
-            <div className="flex justify-start md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
-              {/* trailer section */}
-              <div className="w-[20%] md:w-[5%]">
-                <button className="border px-4 rounded-xl ">
-                  <a href="#trailer">Trailer</a>{" "}
-                </button>
-              </div>
-
-              {/* movie information */}
-              <div
-                className={`md:w-[40%]  w-[90%] text-center mx-auto overflow-y-auto no-scrollbar  relative `}
-              >
-                <h3 className="text-2xl font-light ">
-                  {" "}
-                  {data.overview}
-                </h3>
+              {/* video palyer section */}
+              <div className="border border-slate-400 md:h-[70%] h-[50%] rounded-lg md:w-[60%] w-full mx-auto z-[8]">
+                <iframe
+                  className="w-full z-[12] h-full rounded-lg"
+                  src={`https://www.youtube.com/embed/${videoId}?si=VrlbqVgbkS7bdrrK`}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* trailer section */}
-        <div
-          id="trailer"
-          className="h-screen  text-white md:py-1 py-20 flex flex-col  md:gap-4 gap-24  relative z-[0]"
-          style={{ fontFamily: "Syne,sans-serif" }}
-        >
-          {/* upper section */}
-          <div className="flex flex-col  items-center md:gap-2  md:py-8 py-3 z-[10]">
-            <h1 className="md:text-6xl text-3xl font-semibold text-center md:text-start">{data.original_name}</h1>
-            {/* tags and content */}
-            <div className="flex md:gap-10 gap-2 flex-col md:flex-row  md:justify-center justify-between  items-center w-full ">
-              <h2 className="bg-slate-500 md:px-6  px-2 rounded-md">{data.original_language}</h2>
-              <h3>{new Date(data.first_air_date).toLocaleDateString()} to {new Date(data.last_air_date).toLocaleDateString()}</h3>
-             
-              <h3>Action,Science,Fiction</h3>
-              <h3>{data.number_of_seasons} Seasons, {data.number_of_episodes} Episodes </h3>
-              <h3>Status:{data.status}</h3>
-            </div>
-          </div>
-
-          {/* video palyer section */}
-          <div className="border border-slate-400 md:h-[70%] h-[50%] rounded-lg md:w-[60%] w-full mx-auto z-[8]">
-            <iframe
-              className="w-full z-[12] h-full rounded-lg"
-              src={`https://www.youtube.com/embed/${videoId}?si=VrlbqVgbkS7bdrrK`}
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            ></iframe>
-          </div>
-        </div>
-        </div>))}
-
+        ))}
 
         {/* recomanded section */}
         <div

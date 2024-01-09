@@ -56,7 +56,7 @@ class service {
                 const contentType = response.headers.get('content-type')
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json()
-                    console.log('data at service', data);
+                    // console.log('data at service', data);
                     return data.results;
                 }
             }
@@ -101,8 +101,8 @@ class service {
         }
     }
 
-    // getCategoriesList
-    async getCategoriesList() {
+    // getMovieCategoriesList
+    async getMovieCategoriesList() {
         try {
             const response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${conf.apiKey}`);
             if (response.ok) {
@@ -115,6 +115,23 @@ class service {
             }
         } catch (error) {
             console.log('error in fetching data ', error);
+        }
+    }
+
+    // get tv categories list
+    async getTvCategoriesList(){
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${conf.apiKey}`)
+
+            if(response.ok){
+                const contentType = response.headers.get('content-type');
+                if(contentType && contentType.includes('application/json')){
+                    const data = await response.json()
+                    return data.genres;
+                }
+            }
+        } catch (error) {
+            console.log('error in get tv categories list',error)
         }
     }
 

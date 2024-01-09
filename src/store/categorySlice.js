@@ -1,20 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    category: []
+    movieCategory: [],
+    tvCategory: []
+
 }
 
 const categorySlice = createSlice({
     name: 'category',
     initialState,
     reducers: {
-        setCategory: (state, action) => {
-            state.category = action.payload
+        setMovieCategory: (state, action) => {
+            state.movieCategory = action.payload
+        },
+        setTvCategory: (state, action) => {
+            state.tvCategory = action.payload
         }
     }
 
 })
 
-export const { setCategory } = categorySlice.actions
+export const { setMovieCategory,setTvCategory } = categorySlice.actions
 
 export default categorySlice.reducer;

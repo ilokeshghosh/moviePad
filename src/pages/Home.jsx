@@ -11,7 +11,7 @@ import {
 // import "./Home.css";
 import { useState, useEffect } from "react";
 import service from "../services/service";
-import { setCategory } from "../store/categorySlice";
+import { setMovieCategory,setTvCategory } from "../store/categorySlice";
 export default function Home() {
   const [heroSlider, setHeroSlider] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
@@ -47,9 +47,36 @@ export default function Home() {
       }
     });
 
-    service.getCategoriesList().then((data) => {
-      dispatch(setCategory(data));
-    });
+    try{
+      const localMovieCategoryData = localStorage.getItem('movieGenres');
+      const localTvCategoryData = localStorage.getItem('tvGenres');
+
+      if(localMovieCategoryData && localTvCategoryData){
+          const parsedMovieData= JSON.parse(localMovieCategoryData);
+          const parsedTVData= JSON.parse(localTvCategoryData);
+          if(parsedMovieData && parsedTVData){
+            dispatch(setMovieCategory(parsedMovieData))
+            dispatch(setTvCategory(parsedTVData))
+          }
+      }else{
+        service.getMovieCategoriesList().then((data) => {
+          // console.log('data re called')
+          dispatch(setMovieCategory(data));
+          localStorage.setItem('movieGenres',JSON.stringify(data));
+        });
+
+        service.getTvCategoriesList().then(data=>{
+          if(data){
+            dispatch(setTvCategory(data))
+            localStorage.setItem('tvGenres',JSON.stringify(data));
+          }
+        })
+      }
+    }catch(error){
+      console.log('error in home page',error);
+    }
+
+    
 
     // const url=`https://image.tmdb.org/t/p/original/${'wwemzKWzjKYJFfCeiB57q3r4Bcm.png'}`
     // console.log('url',url);

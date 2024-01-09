@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { FaArrowDownLong } from "../icons";
 import { data } from "../Components/data";
 import { useParams } from "react-router-dom";
 import service from "../services/service";
+import { setMovieCategory } from "../store/categorySlice";
 export default function Movie() {
-  const genresList = useSelector((state) => state.category.category);
+  const genresList = useSelector((state) => state.categories.movieCategory);
   const { movieID } = useParams();
   const [movie, setMovie] = useState([]);
   const [videoId, setVideoId] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const tempId = "603692";
@@ -25,7 +27,7 @@ export default function Movie() {
     if (movie) {
       const tempId = "603692";
       movie.map((data) => {
-        console.log(data.release_date);
+        // console.log(data.release_date);
 
         // console.log(new Date(data.release_date).getFullYear()); //year
 
@@ -52,25 +54,54 @@ export default function Movie() {
     }
   }, [movie]);
 
-  useEffect(() => {
-    console.log("genresList",genresList);
-  }, [genresList]);
 
-  // function getGenreName(arrayIds) {
-  //   const result = [];
-  //   if (genresList) {
-  //     arrayIds.forEach((id) => {
-  //       const data = genresList.find((genre) => {
-  //         if (genre.id === id) {
-  //           return genre.name;
-  //         }
-  //       });
 
-  //       result.push(data);
-  //     });
-  //   }
-  //   return result;
-  // }
+  useEffect(()=>{
+    if(genresList.length<=0){
+      try {
+        const localMovieCategory = localStorage.getItem("movieGenres");
+        if (localMovieCategory) {
+          const movieCategory = JSON.parse(localMovieCategory);
+          if (movieCategory) {
+            dispatch(setMovieCategory(movieCategory));
+          }else{
+            console.log('invalid data');
+          }
+        } else {
+          // api call
+          service.getMovieCategoriesList().then(data=>{
+            if(data){
+              dispatch(setMovieCategory(data))
+              localStorage.setItem('movieGenres',JSON.stringify(data));
+            }
+          })
+
+        }
+      } catch (error) {
+        console.log('error in category Component',error)
+      }
+    }
+  },[])
+
+  function getGenreName(arrayIds) {
+    const result = [];
+    // console.log('genresList',genresList)
+    if (genresList) {
+
+      for(let i=0;i<arrayIds.length;i++ ){
+        for(let j=0;j<genresList.length;j++){
+          if(genresList[j].id ===  arrayIds[i].id){
+            result.push(genresList[j].name)
+          }
+        }
+      }
+    }
+    
+    if(result.length>0){
+
+      return result;
+    }
+  }
 
   if (movie.length > 0) {
     return (
@@ -114,7 +145,7 @@ export default function Movie() {
                 <div className="w-full md:text-start  text-center   md:pt-10 pt-4 h-1/3 ">
                   {/* title */}
                   <h1 className="md:text-[6rem] text-[4rem] font-bold ">
-                    {data.original_title}
+                    {data.title}
                   </h1>
                 </div>
 
@@ -176,21 +207,28 @@ export default function Movie() {
               {/* upper section */}
               <div className="flex flex-col  items-center md:gap-2  md:py-8 py-3 z-[10]">
                 <h1 className="md:text-6xl text-3xl font-semibold">
-                  {data.original_title}
+                  {data.title}
                 </h1>
                 {/* tags and content */}
-                <div className="flex md:gap-10 gap-2 flex-wrap md:justify-center justify-between  items-center w-full ">
+                <div className="flex md:gap-10 gap-2 flex-col md:flex-row md:justify-center justify-between  items-center w-full ">
                   <h2 className="bg-slate-500 md:px-6  px-2 rounded-md">
                     {data.original_language}
                   </h2>
                   <h3>{new Date(data.release_date).toLocaleDateString()}</h3>
+
+                  <div className="flex gap-2">
+                    {" "}
+                    {getGenreName(data.genres).map((genre,index) => (
+                      <h2 key={index}>{genre}</h2>
+                    ))}
+                  </div>
+
                   {/* <div>
                     {" "}
-                    {getGenreName(data.genre_ids).map((genre) => (
-                      <h2 key={genre.id}>{genre.name}</h2>
-                    ))}
+                    {getGenreName(data.genres)}
                   </div> */}
-                  <h3>Action,Science,Fiction</h3>
+
+                  {/* <h3>Action,Science,Fiction</h3> */}
                   <h3>
                     {(data.runtime / 60).toFixed()} h {data.runtime % 60} m
                   </h3>
