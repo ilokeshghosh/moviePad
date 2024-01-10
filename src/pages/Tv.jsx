@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaArrowDownLong } from "../icons";
+import { FaArrowDownLong,FaCirclePlay } from "../icons";
 import { data } from "../Components/data";
 import { useParams } from "react-router-dom";
 import service from "../services/service";
@@ -123,11 +123,12 @@ export default function Movie() {
             >
               {/* cover */}
               <div className="absolute top-0 left-0 w-full h-full bg-black/3 0 z-0 "></div>
+              <div className=" absolute top-0 left-0 w-full h-full z-0 bg-slate-900/30"></div>
 
               {/* cover */}
               <div
                 className=" h-[15%]   left-0 absolute bottom-0  w-full z-[20]"
-                style={{ boxShadow: "inset 0px -30px 70px 0px rgb(2 6 23)" }}
+                style={{ boxShadow: "inset 0px -30px 30px 0px rgb(2 6 23)" }}
               ></div>
 
               {/* scroll down button */}
@@ -180,8 +181,8 @@ export default function Movie() {
                 <div className="flex justify-start md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
                   {/* trailer section */}
                   <div className="w-[20%] md:w-[5%]">
-                    <button className="border px-4 rounded-xl ">
-                      <a href="#trailer">Trailer</a>{" "}
+                  <button className="border-2 px-4 rounded-xl ">
+                      <a className="flex justify-center items-center gap-2 font-bold" href="#trailer">Trailer <FaCirclePlay/></a>{" "}
                     </button>
                   </div>
 
@@ -220,7 +221,7 @@ export default function Movie() {
                   <div className="flex gap-3">
                     {" "}
                     {getGenreName(data.genres).map((genre,index) => (
-                      <h2 key={index}>{genre}</h2>
+                      <h2 key={index}>{genre}{index > data.genres.length-2? '' :','}</h2>
                     ))}
                   </div>
 

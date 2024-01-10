@@ -94,8 +94,9 @@ export default function Home() {
         style={{ fontFamily: "Syne,sans-serif" }}
       >
         {/* nav bar */}
-        <nav className="w-full z-[999]     h-14 mx-auto text-white flex justify-between items-center md:px-20 md:top-0 bottom-0 left-0  fixed">
-          <h2 className="text-xl md:inline-block hidden">Logo Here</h2>
+        <nav className="w-full z-[999]     h-20  mx-auto text-white flex justify-between items-center md:px-20 md:top-2 bottom-0 left-0  fixed">
+          <img className="md:inline-block hidden h-[100px] rounded-full" src="https://ik.imagekit.io/8fgpvoiai/MoviePad/logo_AJ6b_EJh1?updatedAt=1704817030405" alt="" />
+          {/* <h2 className="text-xl ">Logo Here</h2> */}
 
           {/* nav content */}
           <ul className="flex md:gap-10 gap-2 text-lg font-bold items-center  w-full md:w-[50%] justify-between px-5 md:px-0">
