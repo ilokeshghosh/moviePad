@@ -88,13 +88,11 @@ export default function Movie() {
   }, []);
 
   useEffect(() => {
-    console.log("recommendedMovie", recommendedMovie);
-  }, [recommendedMovie]);
+    console.log("recommendedMovie", movie);
+  }, [movie]);
 
   function getGenreName(arrayIds) {
     const result = [];
-    console.log("genresList", genresList);
-    console.log("arrayIds", arrayIds);
     if (genresList) {
       for (let i = 0; i < arrayIds.length; i++) {
         for (let j = 0; j < genresList.length; j++) {
@@ -109,7 +107,6 @@ export default function Movie() {
     }
 
     if (result.length > 0) {
-      console.log("result", result);
       return result;
     }
   }
@@ -149,7 +146,7 @@ export default function Movie() {
                 ></div>
 
                 {/* scroll down button */}
-                <div className="absolute bottom-[36%]  left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
+                <div className="absolute bottom-[36%] md:inline-block hidden left-[45%] md:left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
                   <FaArrowDownLong />
                 </div>
 
@@ -164,7 +161,7 @@ export default function Movie() {
                   </div>
 
                   {/* mid section / data and stars */}
-                  <div className="w-full flex justify-between md:items-center items-start px-5 md:py-10 py-0 z-50 h-1/3 ">
+                  <div className="w-full flex justify-between md:items-center items-start md:px-5 md:py-10 py-0 z-50 h-1/3 ">
                     {/* left / date and time*/}
                     <div className="w-1/2 flex flex-col justify-start items-start">
                       {/* in theatres text */}
@@ -185,21 +182,31 @@ export default function Movie() {
                     </div>
 
                     {/* right/stars */}
-                    <div className="1/2 flex flex-col items-start gap-2">
+                    <div className="h-[200px] flex flex-col items-start gap-1 ">
                       <h3 className="text-xl font-semibold ">STARRING</h3>
-                      <ul className="px-2 text-lg">
-                        <li className="">Actor 1</li>
+                      <ul className="px-2 text-lg  overflow-y-auto no-scrollbar gap-3 flex flex-col">
+                        {data.credits.cast.map((cast, index) => (
+                          <li key={cast.id} className="">
+                            
+                            <a className="flex gap-1" target="_blank" href={`https://www.themoviedb.org/person/${cast.id}-${(cast.name).toLowerCase()}`}>
+                            <img className="w-[26px] h-[30px]  rounded-full" src={`${cast.profile_path ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`:''}`} alt="" />
+                              {cast.name}
+                              </a>
+                            
+                          </li>
+                        ))}
+                        {/* <li className="">Actor 1</li>
                         <li>Actor 2</li>
                         <li>Actor 3</li>
-                        <li>Actor 4</li>
+                        <li>Actor 4</li> */}
                       </ul>
                     </div>
                   </div>
 
                   {/* lower section / button and movie desc */}
-                  <div className="flex justify-start md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
+                  <div className="flex justify-start flex-col md:flex-row  md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
                     {/* trailer section */}
-                    <div className="w-[20%] md:w-[5%]">
+                    <div className="w-[100%] flex justify-center items-center md:w-[5%]">
                       <button className="border-2 px-4 rounded-xl ">
                         <a
                           className="flex justify-center items-center gap-2 font-bold"
@@ -212,7 +219,7 @@ export default function Movie() {
 
                     {/* movie information */}
                     <div
-                      className={`md:w-[40%]  w-[90%] text-center mx-auto overflow-y-auto no-scrollbar  relative `}
+                      className={`md:w-[40%]  w-[90%] text-center mx-auto overflow-y-auto no-scrollbar   relative `}
                     >
                       <h3 className="text-2xl font-light "> {data.overview}</h3>
                     </div>

@@ -44,7 +44,7 @@ export default function TopRated() {
 
   // checking for movie genres list
   useEffect(() => {
-    if (movieGenresList.length<=0) {
+    if (movieGenresList.length <= 0) {
       try {
         const localMovieCategory = localStorage.getItem("movieGenres");
         if (localMovieCategory) {
@@ -71,7 +71,7 @@ export default function TopRated() {
 
   // checking for tv genres list
   useEffect(() => {
-    if (tvGenresList.length<=0) {
+    if (tvGenresList.length <= 0) {
       try {
         const localTvCategory = localStorage.getItem("tvGenres");
         if (localTvCategory) {
@@ -95,8 +95,6 @@ export default function TopRated() {
       }
     }
   }, []);
-
-
 
   function getGenreName(arrayIds) {
     const result = [];
@@ -174,7 +172,7 @@ export default function TopRated() {
                   type === "movie" ? `/movie/${data.id}` : `/tv/${data.id}`
                 }`}
                 key={index}
-                className="w-[400px] h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                className="w-[400px] hover:scale-110 transition-all duration-300 ease-linear h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
                 style={{
                   backgroundImage: `url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
                 }}

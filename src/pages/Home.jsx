@@ -1,6 +1,12 @@
 import Slider from "../Components/HeroSlider";
 import MovieSlider from "../Components/MovieSlider";
-import { Trending, ComingSoon, HeroSection, Category, TopRated } from "../Components";
+import {
+  Trending,
+  ComingSoon,
+  HeroSection,
+  Category,
+  TopRated,
+} from "../Components";
 import { useDispatch } from "react-redux";
 import {
   LuHome,
@@ -11,10 +17,11 @@ import {
 // import "./Home.css";
 import { useState, useEffect } from "react";
 import service from "../services/service";
-import { setMovieCategory,setTvCategory } from "../store/categorySlice";
+import { setMovieCategory, setTvCategory } from "../store/categorySlice";
 export default function Home() {
   const [heroSlider, setHeroSlider] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+
   const dispatch = useDispatch();
 
   function handleFreeToWatch(e) {
@@ -28,6 +35,10 @@ export default function Home() {
       "bg-slate-500"
     );
   }
+
+
+
+
 
   // api calls
   useEffect(() => {
@@ -47,44 +58,38 @@ export default function Home() {
       }
     });
 
-    try{
-      const localMovieCategoryData = localStorage.getItem('movieGenres');
-      const localTvCategoryData = localStorage.getItem('tvGenres');
+    try {
+      const localMovieCategoryData = localStorage.getItem("movieGenres");
+      const localTvCategoryData = localStorage.getItem("tvGenres");
 
-      if(localMovieCategoryData && localTvCategoryData){
-          const parsedMovieData= JSON.parse(localMovieCategoryData);
-          const parsedTVData= JSON.parse(localTvCategoryData);
-          if(parsedMovieData && parsedTVData){
-            dispatch(setMovieCategory(parsedMovieData))
-            dispatch(setTvCategory(parsedTVData))
-          }
-      }else{
+      if (localMovieCategoryData && localTvCategoryData) {
+        const parsedMovieData = JSON.parse(localMovieCategoryData);
+        const parsedTVData = JSON.parse(localTvCategoryData);
+        if (parsedMovieData && parsedTVData) {
+          dispatch(setMovieCategory(parsedMovieData));
+          dispatch(setTvCategory(parsedTVData));
+        }
+      } else {
         service.getMovieCategoriesList().then((data) => {
           // console.log('data re called')
           dispatch(setMovieCategory(data));
-          localStorage.setItem('movieGenres',JSON.stringify(data));
+          localStorage.setItem("movieGenres", JSON.stringify(data));
         });
 
-        service.getTvCategoriesList().then(data=>{
-          if(data){
-            dispatch(setTvCategory(data))
-            localStorage.setItem('tvGenres',JSON.stringify(data));
+        service.getTvCategoriesList().then((data) => {
+          if (data) {
+            dispatch(setTvCategory(data));
+            localStorage.setItem("tvGenres", JSON.stringify(data));
           }
-        })
+        });
       }
-    }catch(error){
-      console.log('error in home page',error);
+    } catch (error) {
+      console.log("error in home page", error);
     }
-
-    
 
     // const url=`https://image.tmdb.org/t/p/original/${'wwemzKWzjKYJFfCeiB57q3r4Bcm.png'}`
     // console.log('url',url);
   }, []);
-
-  useEffect(() => {
-    // console.log("test done", heroSlider);
-  }, [heroSlider]);
 
   if (heroSlider.length > 0 && upcomingMovies.length > 0) {
     return (
@@ -94,8 +99,13 @@ export default function Home() {
         style={{ fontFamily: "Syne,sans-serif" }}
       >
         {/* nav bar */}
-        <nav className="w-full z-[999]     h-20  mx-auto text-white flex justify-between items-center md:px-20 md:top-2 bottom-0 left-0  fixed">
-          <img className="md:inline-block hidden h-[100px] rounded-full" src="https://ik.imagekit.io/8fgpvoiai/MoviePad/logo_AJ6b_EJh1?updatedAt=1704817030405" alt="" />
+        <nav 
+        className="w-full z-[999] nav backdrop-blur-xl   h-16  mx-auto text-white flex justify-between items-center md:px-20 md:top-0 bottom-0 left-0  fixed">
+          <img
+            className="md:inline-block hidden h-[60px] rounded-full "
+            src="https://ik.imagekit.io/8fgpvoiai/MoviePad/logo_AJ6b_EJh1?updatedAt=1704817030405"
+            alt=""
+          />
           {/* <h2 className="text-xl ">Logo Here</h2> */}
 
           {/* nav content */}
@@ -166,7 +176,7 @@ export default function Home() {
         <Category />
 
         {/* top to Watch section */}
-        <TopRated/>
+        <TopRated />
       </div>
     );
   }
