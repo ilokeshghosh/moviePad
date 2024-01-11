@@ -46,28 +46,27 @@ export default function Category() {
   }, []);
 
   useEffect(() => {
-    if (categories.length<=0) {
+    if (categories.length <= 0) {
       try {
         const localMovieCategory = localStorage.getItem("movieGenres");
         if (localMovieCategory) {
           const movieCategory = JSON.parse(localMovieCategory);
           if (movieCategory) {
             dispatch(setMovieCategory(movieCategory));
-          }else{
-            console.log('invalid data');
+          } else {
+            console.log("invalid data");
           }
         } else {
           // api call
-          service.getMovieCategoriesList().then(data=>{
-            if(data){
-              dispatch(setMovieCategory(data))
-              localStorage.setItem('movieGenres',JSON.stringify(data));
+          service.getMovieCategoriesList().then((data) => {
+            if (data) {
+              dispatch(setMovieCategory(data));
+              localStorage.setItem("movieGenres", JSON.stringify(data));
             }
-          })
-
+          });
         }
       } catch (error) {
-        console.log('error in category Component',)
+        console.log("error in category Component");
       }
     }
   }, []);
@@ -139,7 +138,6 @@ export default function Category() {
                     boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
                   }}
                 ></div>
-
                 {/* card content */}
                 <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
                   {/* upper section */}
@@ -161,10 +159,12 @@ export default function Category() {
                     <h1 className="w-full text-2xl font-bold">{movie.title}</h1>
 
                     <h2>{`${
-                      new Date(movie.release_date).getDay() < 10 ? "0" : ""
-                    }${new Date(movie.release_date).getDay()} / ${
-                      new Date(movie.release_date).getMonth() < 10 ? "0" : ""
-                    } ${new Date(movie.release_date).getMonth()}/${new Date(
+                      new Date(movie.release_date).getDay() + 1 < 10 ? "0" : ""
+                    }${new Date(movie.release_date).getDay() + 1} / ${
+                      new Date(movie.release_date).getMonth() + 1 < 10
+                        ? "0"
+                        : ""
+                    }${new Date(movie.release_date).getMonth() + 1}/ ${new Date(
                       movie.release_date
                     ).getFullYear()}`}</h2>
 

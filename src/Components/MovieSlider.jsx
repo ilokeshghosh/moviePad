@@ -10,7 +10,7 @@ import { data } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 // import { useDispatch } from "react-redux";
-import {setMovieCategory} from '../store/categorySlice'
+import { setMovieCategory } from "../store/categorySlice";
 export default function MovieSlider({ slideData }) {
   const genresList = useSelector((state) => state.categories.movieCategory);
   const dispatch = useDispatch();
@@ -66,30 +66,28 @@ export default function MovieSlider({ slideData }) {
     setCardWidth(window.innerWidth < 600 ? window.innerWidth : 400);
   }, [window.innerWidth]);
 
-
   useEffect(() => {
-    if (genresList.length<=0) {
+    if (genresList.length <= 0) {
       try {
         const localMovieCategory = localStorage.getItem("movieGenres");
         if (localMovieCategory) {
           const movieCategory = JSON.parse(localMovieCategory);
           if (movieCategory) {
             dispatch(setMovieCategory(movieCategory));
-          }else{
-            console.log('invalid data');
+          } else {
+            console.log("invalid data");
           }
         } else {
           // api call
-          service.getMovieCategoriesList().then(data=>{
-            if(data){
-              dispatch(setMovieCategory(data))
-              localStorage.setItem('movieGenres',JSON.stringify(data));
+          service.getMovieCategoriesList().then((data) => {
+            if (data) {
+              dispatch(setMovieCategory(data));
+              localStorage.setItem("movieGenres", JSON.stringify(data));
             }
-          })
-
+          });
         }
       } catch (error) {
-        console.log('error in category Component',)
+        console.log("error in category Component");
       }
     }
   }, []);
@@ -165,23 +163,21 @@ export default function MovieSlider({ slideData }) {
               >
                 {index >= current && index <= current + imagesPerPage - 1 && (
                   <>
-
-                    <Link 
-                    className="md:w-[400px] w-screen  h-[400px]  hover:scale-110 transition-all ease-linear duration-200   z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9" 
-                    to={`/movie/${slide.id}`}
-                    style={{
-                      backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.backdrop_path})`,
-                    }}
+                    <Link
+                      className="md:w-[400px] w-screen  h-[400px]  hover:scale-110 transition-all ease-linear duration-200   z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
+                      to={`/movie/${slide.id}`}
+                      style={{
+                        backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.backdrop_path})`,
+                      }}
                     >
-
-                       {/* card cover shadow filter */}
-                       <div
+                      {/* card cover shadow filter */}
+                      <div
                         className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
                         style={{
                           boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
                         }}
                       ></div>
-                      
+
                       {/* card content */}
                       <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
                         {/* upper section */}
@@ -205,16 +201,16 @@ export default function MovieSlider({ slideData }) {
                           </h1>
 
                           <h2>{`${
-                            new Date(slide.release_date).getDay() < 10
+                            new Date(slide.release_date).getDay() + 1 < 10
                               ? "0"
                               : ""
-                          }${new Date(slide.release_date).getDay()} / ${
-                            new Date(slide.release_date).getMonth() < 10
+                          }${new Date(slide.release_date).getDay() + 1} / ${
+                            new Date(slide.release_date).getMonth() + 1 < 10
                               ? "0"
                               : ""
-                          } ${new Date(
-                            slide.release_date
-                          ).getMonth()}/${new Date(
+                          }${
+                            new Date(slide.release_date).getMonth() + 1
+                          }/ ${new Date(
                             slide.release_date
                           ).getFullYear()}`}</h2>
 
@@ -230,7 +226,6 @@ export default function MovieSlider({ slideData }) {
                           </h2>
                         </div>
                       </div>
-
                     </Link>
                   </>
                 )}

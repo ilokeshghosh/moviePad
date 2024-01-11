@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
-import { FaArrowDownLong,FaCirclePlay } from "../icons";
+import { FaArrowDownLong, FaCirclePlay, TiStarFullOutline } from "../icons";
 import { data } from "../Components/data";
 import { useParams } from "react-router-dom";
 import service from "../services/service";
 import { setTvCategory } from "../store/categorySlice";
 import { useSelector, useDispatch } from "react-redux";
+import { HashLink } from "react-router-hash-link";
 export default function Movie() {
   const { seriesID } = useParams();
   const [series, setSeries] = useState([]);
   const [videoId, setVideoId] = useState();
+  const [recommendedSeries, setRecommendedSeries] = useState([]);
   const dispatch = useDispatch();
   const genresList = useSelector((state) => state.categories.tvCategory);
 
   useEffect(() => {
-    const tempId = "603692";
+    // const tempId = "603692";
     service.getTvByID(seriesID).then((data) => {
-      console.log("series data", data);
+      // console.log("series data", data);
       if (data) {
         setSeries([data]);
       }
@@ -27,14 +29,11 @@ export default function Movie() {
     if (series) {
       const tempId = "603692";
       series.map((data) => {
-        console.log(data.release_date);
-
+        // console.log(data.release_date);
         // console.log(new Date(data.release_date).getFullYear()); //year
-
         // console.log(new Date(data.release_date).toLocaleString('default', {month:'long'}).toUpperCase());
         // console.log(new Date(data.release_date).toLocaleString('default', {month:'long'}));
-
-        console.log(data);
+        // console.log(data);
       });
       // console.log(`https://image.tmdb.org/t/p/original/${movie[0].backdrop_path}`)
       // console.log(movie[0].backdrop_path)
@@ -55,11 +54,7 @@ export default function Movie() {
   }, [series]);
 
   useEffect(() => {
-    console.log("video id", videoId);
-  }, [videoId]);
-
-  useEffect(() => {
-    if (genresList.length<=0) {
+    if (genresList.length <= 0) {
       try {
         const localTvCategory = localStorage.getItem("tvGenres");
         if (localTvCategory) {
@@ -84,14 +79,23 @@ export default function Movie() {
     }
   }, []);
 
+  //recommended code
+  useEffect(() => {
+    service.recommendedTv(seriesID).then((data) => {
+      // console.log('recommended movie',data)
+      setRecommendedSeries(data);
+    });
+  }, []);
+
   function getGenreName(arrayIds) {
     const result = [];
     if (genresList) {
-
-      for(let i=0;i<arrayIds.length;i++ ){
-        for(let j=0;j<genresList.length;j++){
-          if(genresList[j].id ===  arrayIds[i].id){
-            result.push(genresList[j].name)
+      for (let i = 0; i < arrayIds.length; i++) {
+        for (let j = 0; j < genresList.length; j++) {
+          if (genresList[j].id === arrayIds[i].id) {
+            result.push(genresList[j].name);
+          } else if (genresList[j].id === arrayIds[i]) {
+            result.push(genresList[j].name);
           }
         }
       }
@@ -99,7 +103,7 @@ export default function Movie() {
     return result;
   }
 
-  if (series.length > 0) {
+  if (series.length > 0 && recommendedSeries.length > 0) {
     return (
       <div
         className="bg-slate-950 z-0 relative overflow-x-hidden no-scrollbar"
@@ -181,8 +185,13 @@ export default function Movie() {
                 <div className="flex justify-start md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
                   {/* trailer section */}
                   <div className="w-[20%] md:w-[5%]">
-                  <button className="border-2 px-4 rounded-xl ">
-                      <a className="flex justify-center items-center gap-2 font-bold" href="#trailer">Trailer <FaCirclePlay/></a>{" "}
+                    <button className="border-2 px-4 rounded-xl ">
+                      <a
+                        className="flex justify-center items-center gap-2 font-bold"
+                        href="#trailer"
+                      >
+                        Trailer <FaCirclePlay />
+                      </a>{" "}
                     </button>
                   </div>
 
@@ -220,8 +229,11 @@ export default function Movie() {
                   {/* <h3>Action,Science,Fiction</h3> */}
                   <div className="flex gap-3">
                     {" "}
-                    {getGenreName(data.genres).map((genre,index) => (
-                      <h2 key={index}>{genre}{index > data.genres.length-2? '' :','}</h2>
+                    {getGenreName(data.genres).map((genre, index) => (
+                      <h2 key={index}>
+                        {genre}
+                        {index > data.genres.length - 2 ? "" : ","}
+                      </h2>
                     ))}
                   </div>
 
@@ -263,15 +275,81 @@ export default function Movie() {
           </div>
 
           {/* cards contaier*/}
-          <div className="w-full flex-shrink-0   h-[80%] overflow-y-auto no-scrollbar justify-between px-10 items-center flex flex-wrap md:gap-5  gap-3 rounded-xl ">
-            {[1, 2, 3, 4, 5, 6].map((index, slide) => (
-              <div
-                key={index}
-                className={` bg-[url(https://images.unsplash.com/photo-1703875497895-0de198243647?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)]  ${
-                  window.innerWidth < 600 ? "w-full flex-3" : "w-1/5 flex-1"
-                }  h-full bg-center bg-cover bg-no-repeat`}
-              ></div>
-            ))}
+          <div className=" flex-wrap justify-between overflow-x-auto no-scrollbar gap-10 md:px-10  w-full h-[90%] flex">
+            {recommendedSeries.map((data) =>
+              data.backdrop_path ? (
+                // <div
+                <HashLink
+                  key={data.id}
+                  smooth
+                  target="_blank"
+                  to={`/tv/${data.id}`}
+                  style={{
+                    backgroundImage: `url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
+                  }}
+                  className="w-[400px]  h-[400px] cursor-pointer bg-no-repeat bg-center bg-cover hover:scale-110 transition-all ease-linear duration-300 z-10 relative"
+                >
+                  {/* card cover shadow filter */}
+                  <div
+                    className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
+                    style={{
+                      boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
+                    }}
+                  ></div>
+
+                  {/* card content */}
+                  <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
+                    {/* upper section */}
+                    <div className="w-full flex  justify-start items-center ">
+                      {/* rating section */}
+                      <div className="relative">
+                        {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
+                        <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
+                        {/* </TiStarFullOutline> */}
+                        <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
+                          {data.vote_average.toFixed(1)}
+                        </h2>
+                      </div>
+                    </div>
+
+                    {/* lower section */}
+                    <div className="flex flex-col w-full  justify-start items-start gap-2 ">
+                      {/* name */}
+                      <h1 className="w-full text-2xl font-bold">{data.name}</h1>
+                      {/* <h1 className="w-full text-2xl font-bold">title</h1> */}
+
+                      <h2>
+                        First Air On :{" "}
+                        {new Date(data.first_air_date).toLocaleDateString()}
+                      </h2>
+
+                      {/* genres */}
+                      <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                        {getGenreName(data.genre_ids).map((genre, index) => (
+                          <h2 key={index}>{genre}</h2>
+                        ))}
+
+                        {/* {getGenreName(data.genre_ids)} */}
+                      </div>
+                      {/* <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                        genres list
+                      </div> */}
+
+                      <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                        {data.original_language}
+                      </h2>
+
+                      {/* <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                        movie
+                      </h2> */}
+                    </div>
+                  </div>
+                </HashLink>
+              ) : (
+                // </div>
+                <></>
+              )
+            )}
           </div>
           {/* </div> */}
         </div>

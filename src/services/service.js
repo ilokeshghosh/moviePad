@@ -73,7 +73,7 @@ class service {
                 const contentType = response.headers.get('content-type')
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json()
-                    console.log('data at service', data);
+                    // console.log('data at service', data);
                     return data.results;
                 }
             }
@@ -119,19 +119,19 @@ class service {
     }
 
     // get tv categories list
-    async getTvCategoriesList(){
+    async getTvCategoriesList() {
         try {
             const response = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${conf.apiKey}`)
 
-            if(response.ok){
+            if (response.ok) {
                 const contentType = response.headers.get('content-type');
-                if(contentType && contentType.includes('application/json')){
+                if (contentType && contentType.includes('application/json')) {
                     const data = await response.json()
                     return data.genres;
                 }
             }
         } catch (error) {
-            console.log('error in get tv categories list',error)
+            console.log('error in get tv categories list', error)
         }
     }
 
@@ -179,6 +179,34 @@ class service {
 
     // recommanded movies
     // https://api.themoviedb.org/3/movie/{movie_id}/similar
+    async recommendedMovie(id) {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${conf.apiKey}`)
+            if (response.ok) {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json()
+                    return data.results;
+                }
+            }
+        } catch (error) {
+            console.log('error in recommended movie', error)
+        }
+    }
+    async recommendedTv(id) {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/recommendations?api_key=${conf.apiKey}`);
+            if (response.ok) {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
+                    return data.results;
+                }
+            }
+        } catch (error) {
+            console.log('error is recommended tv', error)
+        }
+    }
 
     async topRated(name) {
         try {
