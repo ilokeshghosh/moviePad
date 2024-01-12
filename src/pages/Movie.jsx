@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaArrowDownLong, FaCirclePlay, TiStarFullOutline,FaUserCircle  } from "../icons";
-import { data } from "../Components/data";
 import { Link, useParams } from "react-router-dom";
 import service from "../services/service";
 import { setMovieCategory } from "../store/categorySlice";

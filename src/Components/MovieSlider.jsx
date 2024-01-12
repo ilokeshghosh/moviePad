@@ -6,7 +6,6 @@ import {
   AiOutlineSwapRight,
   TiStarFullOutline,
 } from "../icons";
-import { data } from "./data";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 // import { useDispatch } from "react-redux";

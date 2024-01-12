@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "../icons";
-import { data } from "./data";
 import service from "../services/service";
 import { Link } from "react-router-dom";
 export default function HeroSlider({ sliderData }) {

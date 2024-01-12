@@ -5,19 +5,22 @@ import './index.css'
 import { Provider } from 'react-redux'
 import store from './store/store.js'
 import { createBrowserRouter,RouterProvider } from 'react-router-dom'
-import { Construction, Home, Movie,Tv } from "./pages";
+import { Construction, Home, Movie,Tv,Error } from "./pages";
 
 const router = createBrowserRouter([
   {
     path:'/',
     element:<Home/>,
+    errorElement:<Error/>
    
   },{
     path:'/movie/:movieID',
-    element:<Movie/>
+    element:<Movie/>,
+    errorElement:<Error/>
   },{
     path:'/tv/:seriesID',
-    element: <Tv/>
+    element: <Tv/>,
+    errorElement:<Error/>
   }
 ])
 

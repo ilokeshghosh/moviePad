@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaArrowDownLong, FaCirclePlay, TiStarFullOutline,FaUserCircle } from "../icons";
-import { data } from "../Components/data";
+
 import { useParams } from "react-router-dom";
 import service from "../services/service";
 import { setTvCategory } from "../store/categorySlice";
