@@ -8,22 +8,27 @@ import {
   Category,
   TopRated,
 } from "../Components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   LuHome,
   IoMdTrendingUp,
   MdOutlineCategory,
   MdOutlineMovieFilter,
+  VscErrorSmall,
 } from "../icons/index";
 // import "./Home.css";
 import { useState, useEffect } from "react";
 import service from "../services/service";
 import { setMovieCategory, setTvCategory } from "../store/categorySlice";
+import { updateStatus, clearStatus } from "../store/errorSlice";
 // import Loader from "./Loader/Loader";
 import { Loader } from "./index";
 export default function Home() {
   const [heroSlider, setHeroSlider] = useState([]);
   const [pageLoader, setPageLoader] = useState(true);
+  const errorText = useSelector((state) => state.errorReducer.errorText);
+  const isError = useSelector((state) => state.errorReducer.isError);
+  const dispatch = useDispatch();
 
   // const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [activeNavbar, setActiveNavbar] = useState({
@@ -32,8 +37,6 @@ export default function Home() {
     category: false,
     topRated: false,
   });
-
-  const dispatch = useDispatch();
 
   function handleFreeToWatch(e) {
     document.querySelectorAll(".freeToWatch").forEach((filter) => {
@@ -47,14 +50,29 @@ export default function Home() {
     );
   }
 
+  useEffect(() => {
+    dispatch(updateStatus("errro errro errror"));
+    setTimeout(() => {
+      dispatch(clearStatus());
+    }, 3000);
+  }, [heroSlider]);
+
   // api calls
   useEffect(() => {
-    service.nowPlaying().then((data) => {
-      if (data) {
-        setHeroSlider(data);
-        setPageLoader(false);
-      }
-    });
+    service
+      .nowPlaying()
+      .then((data) => {
+        if (data) {
+          setHeroSlider(data);
+          setPageLoader(false);
+        }
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
 
     // service.getMovieID("1112547").then((data) => {
     //   console.log("data", data);
@@ -92,7 +110,10 @@ export default function Home() {
         });
       }
     } catch (error) {
-      console.log("error in home page", error);
+      dispatch(updateStatus(error.message));
+      setTimeout(() => {
+        dispatch(clearStatus());
+      }, 3000);
     }
 
     // const url=`https://image.tmdb.org/t/p/original/${'wwemzKWzjKYJFfCeiB57q3r4Bcm.png'}`
@@ -108,6 +129,36 @@ export default function Home() {
         style={{ fontFamily: "Syne,sans-serif" }}
       >
         <div id="home"></div>
+
+        {/* error container */}
+        <div
+          className={`w-full absolute md:bottom-3 bottom-20 flex  z-[500] ${
+            isError ? "" : "hidden"
+          }`}
+        >
+          {/* error section */}
+          <div className="min-w-[30%] h-18 mx-auto bg-slate-900/50 backdrop-blur rounded-lg flex justify-between items-center text-white gap-3">
+            {/* right section */}
+            <div className="bg-red-500 flex justify-center items-center h-full px-4">
+              <VscErrorSmall className="text-6xl" />
+            </div>
+
+            {/* middle section */}
+            <div className="w-full">
+              <h2>{errorText}</h2>
+              <div className=" w-full loadingBar"></div>
+            </div>
+
+            <span className="border h-[60%] text-slate-400"></span>
+            {/*left section */}
+            <div
+              onClick={() => dispatch(clearStatus())}
+              className="text-slate-300 text-lg font-bold px-2 cursor-pointer"
+            >
+              CLOSE
+            </div>
+          </div>
+        </div>
 
         {/* nav bar */}
         <nav className="w-full z-[999] nav backdrop-blur-xl   h-16  mx-auto text-white flex justify-between items-center md:px-20 md:top-0 bottom-0 left-0  fixed">

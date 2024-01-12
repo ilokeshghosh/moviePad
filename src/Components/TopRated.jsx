@@ -4,12 +4,14 @@ import service from "../services/service";
 import { TiStarFullOutline } from "../icons/index";
 import { Link } from "react-router-dom";
 import { setMovieCategory, setTvCategory } from "../store/categorySlice";
+import { updateStatus, clearStatus } from "../store/errorSlice";
 
 export default function TopRated() {
   const movieGenresList = useSelector(
     (state) => state.categories.movieCategory
   );
   const tvGenresList = useSelector((state) => state.categories.tvCategory);
+  const dispatch = useDispatch();
 
   const [type, setType] = useState();
   const [topRatedMovies, setTopRatedMovies] = useState([]);
@@ -24,22 +26,38 @@ export default function TopRated() {
       "bg-slate-500"
     );
 
-    service.topRated(name).then((data) => {
-      if (data) {
-        setTopRatedMovies(data);
-        setType(name);
-      }
-    });
+    service
+      .topRated(name)
+      .then((data) => {
+        if (data) {
+          setTopRatedMovies(data);
+          setType(name);
+        }
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
   }
 
   useEffect(() => {
     const name = "movie";
-    service.topRated(name).then((data) => {
-      if (data) {
-        setType("movie");
-        setTopRatedMovies(data);
-      }
-    });
+    service
+      .topRated(name)
+      .then((data) => {
+        if (data) {
+          setType("movie");
+          setTopRatedMovies(data);
+        }
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
   }, []);
 
   // checking for movie genres list
@@ -56,15 +74,26 @@ export default function TopRated() {
           }
         } else {
           // api call
-          service.getMovieCategoriesList().then((data) => {
-            if (data) {
-              dispatch(setMovieCategory(data));
-              localStorage.setItem("movieGenres", JSON.stringify(data));
-            }
-          });
+          service
+            .getMovieCategoriesList()
+            .then((data) => {
+              if (data) {
+                dispatch(setMovieCategory(data));
+                localStorage.setItem("movieGenres", JSON.stringify(data));
+              }
+            })
+            .catch((error) => {
+              dispatch(updateStatus(error.message));
+              setTimeout(() => {
+                dispatch(clearStatus());
+              }, 3000);
+            });
         }
       } catch (error) {
-        console.log("error in category Component");
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
       }
     }
   }, []);
@@ -83,15 +112,26 @@ export default function TopRated() {
           }
         } else {
           // api call
-          service.getTvCategoriesList().then((data) => {
-            if (data) {
-              dispatch(setTvCategory(data));
-              localStorage.setItem("tvGenres", JSON.stringify(data));
-            }
-          });
+          service
+            .getTvCategoriesList()
+            .then((data) => {
+              if (data) {
+                dispatch(setTvCategory(data));
+                localStorage.setItem("tvGenres", JSON.stringify(data));
+              }
+            })
+            .catch((error) => {
+              dispatch(updateStatus(error.message));
+              setTimeout(() => {
+                dispatch(clearStatus());
+              }, 3000);
+            });
         }
       } catch (error) {
-        console.log("error in category Component");
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
       }
     }
   }, []);

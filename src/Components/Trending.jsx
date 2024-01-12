@@ -2,16 +2,27 @@ import { useEffect, useState } from "react";
 import { MovieSlider } from "./";
 import service from "../services/service";
 import { SlPicture } from "../icons/index";
+import { useDispatch, useSelector } from "react-redux";
+import { updateStatus, clearStatus } from "../store/errorSlice";
 
 export default function Trending() {
   const [trendingMovies, setTrendingMovie] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    service.trendingMovies().then((data) => {
-      setTrendingMovie(data);
-      setLoading(false);
-    });
+    service
+      .trendingMovies()
+      .then((data) => {
+        setTrendingMovie(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
   }, []);
 
   if (trendingMovies.length > 0) {

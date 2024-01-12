@@ -20,16 +20,26 @@ export default function Movie() {
   const [pageLoader, setPageLoader] = useState(true);
   const dispatch = useDispatch();
   const genresList = useSelector((state) => state.categories.tvCategory);
+  const errorText = useSelector((state) => state.errorReducer.errorText);
+  const isError = useSelector((state) => state.errorReducer.isError);
 
   useEffect(() => {
     // const tempId = "603692";
-    service.getTvByID(seriesID).then((data) => {
-      // console.log("series data", data);
-      if (data) {
-        setSeries([data]);
-        setPageLoader(false);
-      }
-    });
+    service
+      .getTvByID(seriesID)
+      .then((data) => {
+        // console.log("series data", data);
+        if (data) {
+          setSeries([data]);
+          setPageLoader(false);
+        }
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
     // console.log("movie id",movieID);
   }, [seriesID]);
 
@@ -47,17 +57,25 @@ export default function Movie() {
       // console.log(movie[0].backdrop_path)
       // movie[0]
 
-      service.getTvVideo(seriesID).then((videos) => {
-        videos.map((video) => {
-          if (
-            video.name === "Official Trailer" ||
-            video.name.includes("Official Trailer") ||
-            video.name.includes("Trailer")
-          ) {
-            setVideoId(video.key);
-          }
+      service
+        .getTvVideo(seriesID)
+        .then((videos) => {
+          videos.map((video) => {
+            if (
+              video.name === "Official Trailer" ||
+              video.name.includes("Official Trailer") ||
+              video.name.includes("Trailer")
+            ) {
+              setVideoId(video.key);
+            }
+          });
+        })
+        .catch((error) => {
+          dispatch(updateStatus(error.message));
+          setTimeout(() => {
+            dispatch(clearStatus());
+          }, 3000);
         });
-      });
     }
   }, [series]);
 
@@ -74,25 +92,44 @@ export default function Movie() {
           }
         } else {
           // api call
-          service.getTvCategoriesList().then((data) => {
-            if (data) {
-              dispatch(setTvCategory(data));
-              localStorage.setItem("tvGenres", JSON.stringify(data));
-            }
-          });
+          service
+            .getTvCategoriesList()
+            .then((data) => {
+              if (data) {
+                dispatch(setTvCategory(data));
+                localStorage.setItem("tvGenres", JSON.stringify(data));
+              }
+            })
+            .catch((error) => {
+              dispatch(updateStatus(error.message));
+              setTimeout(() => {
+                dispatch(clearStatus());
+              }, 3000);
+            });
         }
       } catch (error) {
-        console.log("error in Tv page", error);
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
       }
     }
   }, []);
 
   //recommended code
   useEffect(() => {
-    service.recommendedTv(seriesID).then((data) => {
-      // console.log('recommended movie',data)
-      setRecommendedSeries(data);
-    });
+    service
+      .recommendedTv(seriesID)
+      .then((data) => {
+        // console.log('recommended movie',data)
+        setRecommendedSeries(data);
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
   }, []);
 
   function getGenreName(arrayIds) {
@@ -217,7 +254,7 @@ export default function Movie() {
                 </div>
 
                 {/* lower section / button and movie desc */}
-                <div className="flex  justify-start items-center  flex-col md:flex-row  md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
+                <div className="flex justify-start flex-col md:flex-row  md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
                   {/* trailer section */}
                   <div className="w-[20%]   md:w-[5%]">
                     <button className="border-2 px-4 rounded-xl ">

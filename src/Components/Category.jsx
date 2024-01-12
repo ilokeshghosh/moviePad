@@ -6,6 +6,7 @@ import { TiStarFullOutline } from "../icons/index";
 import { Link } from "react-router-dom";
 // import { useDispatch } from "react-redux";
 import { setMovieCategory } from "../store/categorySlice";
+import { updateStatus, clearStatus } from "../store/errorSlice";
 export default function Category() {
   const dispatch = useDispatch();
   const [movies, setMovies] = useState([]);
@@ -28,21 +29,37 @@ export default function Category() {
       "bg-slate-500"
     );
 
-    service.getMoviesListByCategories(id).then((data) => {
-      if (data) {
-        setMovies(data);
-      }
-    });
+    service
+      .getMoviesListByCategories(id)
+      .then((data) => {
+        if (data) {
+          setMovies(data);
+        }
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
   }
 
   useEffect(() => {
     const id = 28;
     const genre = "Action";
-    service.getMoviesListByCategories(id).then((data) => {
-      if (data) {
-        setMovies(data);
-      }
-    });
+    service
+      .getMoviesListByCategories(id)
+      .then((data) => {
+        if (data) {
+          setMovies(data);
+        }
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
   }, []);
 
   useEffect(() => {
@@ -66,7 +83,10 @@ export default function Category() {
           });
         }
       } catch (error) {
-        console.log("error in category Component");
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
       }
     }
   }, []);
@@ -89,7 +109,10 @@ export default function Category() {
 
   if (categories.length > 0 && movies.length > 0) {
     return (
-      <div id="category" className="relative h-screen text-white md:pt-20 pt-20 ">
+      <div
+        id="category"
+        className="relative h-screen text-white md:pt-20 pt-20 "
+      >
         {/* background vectors */}
         <div className="">
           <div className="absolute top-[60%] hidden  xl:inline-block -left-[15%]  z-0 bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>

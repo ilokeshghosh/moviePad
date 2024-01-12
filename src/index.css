@@ -38,6 +38,23 @@
         .skeleton {
             animation: skeleton-loading 1s linear infinite alternate;
         }
+
+
+        /* error loader animation */
+        @keyframes loading-bar {
+            0%{
+                width: 100%;
+            }
+            
+            100%{
+                width:0%;
+            }
+        }
+
+        .loadingBar{
+            animation: loading-bar 3s ease;
+            border:2px solid red;
+        }
     }
 
 

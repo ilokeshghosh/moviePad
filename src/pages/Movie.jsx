@@ -5,12 +5,14 @@ import {
   FaCirclePlay,
   TiStarFullOutline,
   FaUserCircle,
+  VscErrorSmall,
 } from "../icons";
 import { Link, useParams } from "react-router-dom";
 import service from "../services/service";
 import { setMovieCategory } from "../store/categorySlice";
 import { HashLink } from "react-router-hash-link";
 import { Loader } from "./index";
+import { updateStatus, clearStatus } from "../store/errorSlice";
 export default function Movie() {
   const genresList = useSelector((state) => state.categories.movieCategory);
   const { movieID } = useParams();
@@ -19,16 +21,26 @@ export default function Movie() {
   const [pageLoader, setPageLoader] = useState(true);
   const [videoId, setVideoId] = useState();
   const dispatch = useDispatch();
+  const errorText = useSelector((state) => state.errorReducer.errorText);
+  const isError = useSelector((state) => state.errorReducer.isError);
 
   useEffect(() => {
     // const tempId = "603692";
-    service.getMovieByID(movieID).then((data) => {
-      // console.log("moivie data", data);
-      if (data) {
-        setMovie([data]);
-        // setPageLoader(false);
-      }
-    });
+    service
+      .getMovieByID(movieID)
+      .then((data) => {
+        // console.log("moivie data", data);
+        if (data) {
+          setMovie([data]);
+          // setPageLoader(false);
+        }
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
     // console.log("movie id",movieID);
   }, [movieID]);
 
@@ -46,17 +58,25 @@ export default function Movie() {
       // console.log(movie[0].backdrop_path)
       // movie[0]
 
-      service.getMovieVideo(movieID).then((videos) => {
-        videos.map((video) => {
-          if (
-            video.name === "Official Trailer" ||
-            video.name.includes("Official Trailer") ||
-            video.name.includes("Trailer")
-          ) {
-            setVideoId(video.key);
-          }
+      service
+        .getMovieVideo(movieID)
+        .then((videos) => {
+          videos.map((video) => {
+            if (
+              video.name === "Official Trailer" ||
+              video.name.includes("Official Trailer") ||
+              video.name.includes("Trailer")
+            ) {
+              setVideoId(video.key);
+            }
+          });
+        })
+        .catch((error) => {
+          dispatch(updateStatus(error.message));
+          setTimeout(() => {
+            dispatch(clearStatus());
+          }, 3000);
         });
-      });
     }
   }, [movie]);
 
@@ -78,10 +98,18 @@ export default function Movie() {
               dispatch(setMovieCategory(data));
               localStorage.setItem("movieGenres", JSON.stringify(data));
             }
+          }).catch((error) => {
+            dispatch(updateStatus(error.message));
+            setTimeout(() => {
+              dispatch(clearStatus());
+            }, 3000);
           });
         }
       } catch (error) {
-        console.log("error in category Component", error);
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
       }
     }
   }, []);
@@ -91,6 +119,11 @@ export default function Movie() {
     service.recommendedMovie(movieID).then((data) => {
       // console.log('recommended movie',data)
       setRecommendedMovie(data);
+    }).catch((error) => {
+      dispatch(updateStatus(error.message));
+      setTimeout(() => {
+        dispatch(clearStatus());
+      }, 3000);
     });
   }, []);
 
@@ -131,6 +164,36 @@ export default function Movie() {
           <div className="absolute top-[30%] z-[-1]   -right-[30%]  bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
 
           <div className="absolute top-[50%]   z-[-1]  -left-[3%]  bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
+        </div>
+
+        {/* error container */}
+        <div
+          className={`w-full absolute md:bottom-3 bottom-20 flex  z-[500] ${
+            isError ? "" : "hidden"
+          }`}
+        >
+          {/* error section */}
+          <div className="min-w-[30%] h-18 mx-auto bg-slate-900/50 backdrop-blur rounded-lg flex justify-between items-center text-white gap-3">
+            {/* right section */}
+            <div className="bg-red-500 flex justify-center items-center h-full px-4">
+              <VscErrorSmall className="text-6xl" />
+            </div>
+
+            {/* middle section */}
+            <div className="w-full">
+              <h2>{errorText}</h2>
+              <div className=" w-full loadingBar"></div>
+            </div>
+
+            <span className="border h-[60%] text-slate-400"></span>
+            {/*left section */}
+            <div
+              onClick={() => dispatch(clearStatus())}
+              className="text-slate-300 text-lg font-bold px-2 cursor-pointer"
+            >
+              CLOSE
+            </div>
+          </div>
         </div>
 
         {/* hero container */}

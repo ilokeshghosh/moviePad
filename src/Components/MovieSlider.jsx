@@ -78,15 +78,26 @@ export default function MovieSlider({ slideData }) {
           }
         } else {
           // api call
-          service.getMovieCategoriesList().then((data) => {
-            if (data) {
-              dispatch(setMovieCategory(data));
-              localStorage.setItem("movieGenres", JSON.stringify(data));
-            }
-          });
+          service
+            .getMovieCategoriesList()
+            .then((data) => {
+              if (data) {
+                dispatch(setMovieCategory(data));
+                localStorage.setItem("movieGenres", JSON.stringify(data));
+              }
+            })
+            .catch((error) => {
+              dispatch(updateStatus(error.message));
+              setTimeout(() => {
+                dispatch(clearStatus());
+              }, 3000);
+            });
         }
       } catch (error) {
-        console.log("error in category Component");
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
       }
     }
   }, []);

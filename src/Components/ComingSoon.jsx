@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import service from "../services/service";
 import { MovieSlider } from "./";
+import { useDispatch} from "react-redux";
+import { updateStatus, clearStatus } from "../store/errorSlice";
 export default function ComingSoon() {
   const [upcomingMovies, setUpcomingMovies] = useState([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     service.getUpcomingMovies().then((data) => {
       if (data) {
         setUpcomingMovies(data);
       }
+    }).catch((error) => {
+      dispatch(updateStatus(error.message));
+      setTimeout(() => {
+        dispatch(clearStatus());
+      }, 3000);
     });
   }, []);
 

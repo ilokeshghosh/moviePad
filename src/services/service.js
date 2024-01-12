@@ -14,7 +14,8 @@ class service {
             }
 
         } catch (error) {
-            console.log('error in fetching data ', error);
+            throw error;
+            
         }
     }
 
@@ -30,7 +31,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error in fetching data ', error);
+            throw error;
         }
     }
     async getTvByID(id) {
@@ -44,7 +45,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error in fetching data ', error);
+            throw error;
         }
     }
 
@@ -61,7 +62,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error is ', error)
+            throw error;
         }
     }
 
@@ -78,7 +79,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error is ', error)
+            throw error;
         }
     }
 
@@ -97,7 +98,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error in fetching data ', error);
+            throw error;
         }
     }
 
@@ -114,7 +115,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error in fetching data ', error);
+            throw error;
         }
     }
 
@@ -131,7 +132,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error in get tv categories list', error)
+            throw error;
         }
     }
 
@@ -147,7 +148,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error in fetching data ', error);
+            throw error;
         }
     }
 
@@ -163,7 +164,7 @@ class service {
                 }
             }
         } catch (error) {
-
+            throw error;
         }
     }
 
@@ -173,12 +174,11 @@ class service {
             return response.url;
 
         } catch (error) {
-            console.log('error in fetching data ', error);
+            throw error;
         }
     }
 
     // recommanded movies
-    // https://api.themoviedb.org/3/movie/{movie_id}/similar
     async recommendedMovie(id) {
         try {
             const response = await fetch(`https://api.themoviedb.org/3/movie/${id}/similar?api_key=${conf.apiKey}`)
@@ -190,7 +190,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error in recommended movie', error)
+            throw error;
         }
     }
     async recommendedTv(id) {
@@ -204,7 +204,7 @@ class service {
                 }
             }
         } catch (error) {
-            console.log('error is recommended tv', error)
+            throw error;
         }
     }
 
@@ -233,10 +233,10 @@ class service {
                     }
                     break;
                 default:
-                    console.log('invalid input');
+                    // console.log('invalid input',name);
             }
         } catch (error) {
-            console.log('error is ', error);
+            throw error;
         }
 
     }

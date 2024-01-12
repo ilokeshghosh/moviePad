@@ -10,5 +10,6 @@ import { FaUserCircle } from "react-icons/fa";
 import { FcBrokenLink } from "react-icons/fc";
 import { HiOutlineRocketLaunch } from "react-icons/hi2";
 import { SlPicture } from "react-icons/sl";
+import { VscErrorSmall } from "react-icons/vsc";
 
-export {FaChevronLeft,FaChevronRight,AiOutlineSwapRight,AiOutlineSwapLeft,FaArrowDownLong,LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter,TiStarFullOutline,FaCirclePlay,FaUserCircle,FcBrokenLink,HiOutlineRocketLaunch,SlPicture };
+export {FaChevronLeft,FaChevronRight,AiOutlineSwapRight,AiOutlineSwapLeft,FaArrowDownLong,LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter,TiStarFullOutline,FaCirclePlay,FaUserCircle,FcBrokenLink,HiOutlineRocketLaunch,SlPicture,VscErrorSmall };
