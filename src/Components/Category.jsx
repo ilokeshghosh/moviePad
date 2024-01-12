@@ -89,7 +89,7 @@ export default function Category() {
 
   if (categories.length > 0 && movies.length > 0) {
     return (
-      <div id="category" className="relative h-screen text-white pt-20 ">
+      <div id="category" className="relative h-screen text-white md:pt-20 pt-20 ">
         {/* background vectors */}
         <div className="">
           <div className="absolute top-[60%] hidden  xl:inline-block -left-[15%]  z-0 bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>

@@ -14,7 +14,7 @@ export default function ComingSoon() {
 
   if (upcomingMovies.length > 0) {
     return (
-      <div className="flex flex-col pt-20 gap-5 ">
+      <div className="flex flex-col pt-20 gap-5 py-14 ">
         <h2 className="text-4xl font-bold px-10 w-full text-center md:text-start">
           Coming Soon
         </h2>

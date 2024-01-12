@@ -13,7 +13,7 @@ export default function Trending() {
 
   if (trendingMovies.length > 0) {
     return (
-      <div className=" flex flex-col pt-20 gap-5 ">
+      <div className=" flex flex-col md:pt-20 pt-10 gap-5  py-10 md:py-0">
         <h2 className="text-4xl font-bold px-10 w-full text-center md:text-start">
           Trending
         </h2>

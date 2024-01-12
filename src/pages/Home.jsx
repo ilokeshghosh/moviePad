@@ -1,5 +1,6 @@
 import Slider from "../Components/HeroSlider";
 import MovieSlider from "../Components/MovieSlider";
+import { NavHashLink } from "react-router-hash-link";
 import {
   Trending,
   ComingSoon,
@@ -21,6 +22,12 @@ import { setMovieCategory, setTvCategory } from "../store/categorySlice";
 export default function Home() {
   const [heroSlider, setHeroSlider] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [activeNavbar, setActiveNavbar] = useState({
+    home: true,
+    trending: false,
+    category: false,
+    topRated: false,
+  });
 
   const dispatch = useDispatch();
 
@@ -35,10 +42,6 @@ export default function Home() {
       "bg-slate-500"
     );
   }
-
-
-
-
 
   // api calls
   useEffect(() => {
@@ -94,13 +97,14 @@ export default function Home() {
   if (heroSlider.length > 0 && upcomingMovies.length > 0) {
     return (
       <div
-        id="home"
+        // id="home"
         className=" h-screen bg-slate-950 w-full overflow-y-auto no-scrollbar overflow-x-hidden"
         style={{ fontFamily: "Syne,sans-serif" }}
       >
+        <div id="home"></div>
+
         {/* nav bar */}
-        <nav 
-        className="w-full z-[999] nav backdrop-blur-xl   h-16  mx-auto text-white flex justify-between items-center md:px-20 md:top-0 bottom-0 left-0  fixed">
+        <nav className="w-full z-[999] nav backdrop-blur-xl   h-16  mx-auto text-white flex justify-between items-center md:px-20 md:top-0 bottom-0 left-0  fixed">
           <img
             className="md:inline-block hidden h-[60px] rounded-full "
             src="https://ik.imagekit.io/8fgpvoiai/MoviePad/logo_AJ6b_EJh1?updatedAt=1704817030405"
@@ -111,39 +115,132 @@ export default function Home() {
           {/* nav content */}
           <ul className="flex md:gap-10 gap-2 text-lg font-bold items-center  w-full md:w-[50%] justify-between px-5 md:px-0">
             <li>
-              <a href="#home">
-                <h1 className="hidden md:inline-block">Home</h1>{" "}
-                <h1 className="md:hidden text-2xl">
-                  <LuHome />
-                </h1>
-              </a>
+              <NavHashLink
+                smooth
+                to={"/#home"}
+                onClick={(e) =>
+                  setActiveNavbar({
+                    home: true,
+                    trending: false,
+                    category: false,
+                    topRated: false,
+                  })
+                }
+                className={`${
+                  activeNavbar.home ? "text-red-500 font-bold " : ""
+                } flex flex-col gap-2 md:gap-0`}
+              >
+                {/* nav content */}
+                <div className="transition-all ease-linear duration-500">
+                  <h1 className="hidden md:inline-block">Home</h1>{" "}
+                  <h1 className="md:hidden text-2xl">
+                    <LuHome />
+                  </h1>
+                </div>
+                <h2
+                  className={` transition-all duration-500 ease-linear  ${
+                    activeNavbar.home
+                      ? "md:w-full  w-0 mx-auto md:mx-0  border border-slate-100/60"
+                      : "w-0 border-none mx-auto"
+                  }`}
+                ></h2>
+              </NavHashLink>
+            </li>
+
+            <li>
+              <NavHashLink
+                smooth
+                to={"/#trending"}
+                onClick={() =>
+                  setActiveNavbar({
+                    home: false,
+                    trending: true,
+                    category: false,
+                    topRated: false,
+                  })
+                }
+                className={`${
+                  activeNavbar.trending ? "text-red-500 font-bold " : ""
+                } flex flex-col`}
+              >
+                <div className="transition-all ease-linear duration-500">
+                  <h1 className="hidden md:inline-block">Trending</h1>{" "}
+                  <h1 className="md:hidden text-2xl">
+                    <IoMdTrendingUp />
+                  </h1>
+                </div>
+
+                <h2
+                  className={` transition-all duration-500 ease-linear  ${
+                    activeNavbar.trending
+                      ? "md:w-full w-0 mx-auto md:mx-0  border border-slate-100/60"
+                      : "w-0 border-none mx-auto"
+                  }`}
+                ></h2>
+              </NavHashLink>
             </li>
             <li>
-              <a href="#trending">
-                {" "}
-                <h1 className="hidden md:inline-block">Trending</h1>{" "}
-                <h1 className="md:hidden text-2xl">
-                  <IoMdTrendingUp />
-                </h1>
-              </a>
+              <NavHashLink
+                smooth
+                to={"/#category"}
+                onClick={() =>
+                  setActiveNavbar({
+                    home: false,
+                    trending: false,
+                    category: true,
+                    topRated: false,
+                  })
+                }
+                className={`${
+                  activeNavbar.category ? "text-red-500 font-bold " : ""
+                } flex flex-col`}
+              >
+                <div className="transition-all ease-linear duration-500">
+                  <h1 className="hidden md:inline-block">Category</h1>{" "}
+                  <h1 className="md:hidden text-2xl">
+                    <MdOutlineCategory />
+                  </h1>
+                </div>
+
+                <h2
+                  className={` transition-all duration-500 ease-linear  ${
+                    activeNavbar.category
+                      ? "md:w-full  w-0 mx-auto md:mx-0  border border-slate-100/60"
+                      : "w-0 border-none mx-auto"
+                  }`}
+                ></h2>
+              </NavHashLink>
             </li>
             <li>
-              <a href="#category">
-                {" "}
-                <h1 className="hidden md:inline-block">Category</h1>{" "}
-                <h1 className="md:hidden text-2xl">
-                  <MdOutlineCategory />
-                </h1>
-              </a>
-            </li>
-            <li>
-              <a href="#topRated">
-                {" "}
-                <h1 className="hidden md:inline-block">Top Rated</h1>{" "}
-                <h1 className="md:hidden text-2xl">
-                  <MdOutlineMovieFilter />
-                </h1>
-              </a>
+              <NavHashLink
+                smooth
+                to={"/#topRated"}
+                onClick={() =>
+                  setActiveNavbar({
+                    home: false,
+                    trending: false,
+                    category: false,
+                    topRated: true,
+                  })
+                }
+                className={`${
+                  activeNavbar.topRated ? "text-red-500 font-bold " : ""
+                } flex flex-col`}
+              >
+                <div className="transition-all ease-linear duration-500">
+                  <h1 className="hidden md:inline-block">Top Rated</h1>{" "}
+                  <h1 className="md:hidden text-2xl">
+                    <MdOutlineMovieFilter />
+                  </h1>
+                </div>
+                <h2
+                  className={` transition-all duration-500 ease-linear  ${
+                    activeNavbar.topRated
+                      ? "md:w-full  w-0 mx-auto md:mx-0  border border-slate-100/60"
+                      : "w-0 border-none mx-auto"
+                  }`}
+                ></h2>
+              </NavHashLink>
             </li>
           </ul>
         </nav>

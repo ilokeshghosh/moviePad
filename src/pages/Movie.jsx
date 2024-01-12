@@ -155,7 +155,7 @@ export default function Movie() {
                   {/* upper section /title*/}
                   <div className="w-full md:text-start  text-center   md:pt-10 pt-4 h-1/3 ">
                     {/* title */}
-                    <h1 className="md:text-[6rem] text-[4rem] font-bold ">
+                    <h1 className="md:text-[6rem] text-[2.5rem] font-bold ">
                       {data.title}
                     </h1>
                   </div>

@@ -138,7 +138,7 @@ export default function Movie() {
               ></div>
 
               {/* scroll down button */}
-              <div className="absolute bottom-[36%]  left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
+              <div className="absolute bottom-[36%]  md:inline-block hidden left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
                 <FaArrowDownLong />
               </div>
 
@@ -191,9 +191,9 @@ export default function Movie() {
                 </div>
 
                 {/* lower section / button and movie desc */}
-                <div className="flex justify-start md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
+                <div className="flex  justify-start items-center  flex-col md:flex-row  md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
                   {/* trailer section */}
-                  <div className="w-[20%] md:w-[5%]">
+                  <div className="w-[20%]   md:w-[5%]">
                     <button className="border-2 px-4 rounded-xl ">
                       <a
                         className="flex justify-center items-center gap-2 font-bold"
@@ -284,7 +284,7 @@ export default function Movie() {
           </div>
 
           {/* cards contaier*/}
-          <div className=" flex-wrap justify-between overflow-x-auto no-scrollbar gap-10 md:px-10  w-full h-[90%] flex">
+          <div className=" flex-wrap md:justify-between justify-center  overflow-x-auto no-scrollbar gap-10 md:px-10  w-full h-[90%] flex">
             {recommendedSeries.map((data) =>
               data.backdrop_path ? (
                 // <div

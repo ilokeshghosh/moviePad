@@ -138,7 +138,7 @@ export default function TopRated() {
         <div className="w-full h-screen z-50  flex flex-col gap-10">
           {/* filter bar container */}
           <div className=" w-full items-center  justify-start flex flex-col md:flex-row md:gap-10 px-10 gap-3">
-            <h2 className=" text-4xl w-[80%] md:w-[30%] xl:w-[20%]">
+            <h2 className=" text-4xl text-center  w-[80%] md:w-[30%] xl:w-[20%]">
               Top Rated
             </h2>
             {/* filter bar */}
