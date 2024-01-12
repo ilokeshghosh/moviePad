@@ -19,9 +19,13 @@ import {
 import { useState, useEffect } from "react";
 import service from "../services/service";
 import { setMovieCategory, setTvCategory } from "../store/categorySlice";
+// import Loader from "./Loader/Loader";
+import { Loader } from "./index";
 export default function Home() {
   const [heroSlider, setHeroSlider] = useState([]);
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [pageLoader, setPageLoader] = useState(true);
+
+  // const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [activeNavbar, setActiveNavbar] = useState({
     home: true,
     trending: false,
@@ -48,6 +52,7 @@ export default function Home() {
     service.nowPlaying().then((data) => {
       if (data) {
         setHeroSlider(data);
+        setPageLoader(false);
       }
     });
 
@@ -55,11 +60,11 @@ export default function Home() {
     //   console.log("data", data);
     // });
 
-    service.getUpcomingMovies().then((data) => {
-      if (data) {
-        setUpcomingMovies(data);
-      }
-    });
+    // service.getUpcomingMovies().then((data) => {
+    //   if (data) {
+    //     setUpcomingMovies(data);
+    //   }
+    // });
 
     try {
       const localMovieCategoryData = localStorage.getItem("movieGenres");
@@ -94,7 +99,8 @@ export default function Home() {
     // console.log('url',url);
   }, []);
 
-  if (heroSlider.length > 0 && upcomingMovies.length > 0) {
+  // if (heroSlider.length > 0 )
+  if (!pageLoader && heroSlider.length > 0) {
     return (
       <div
         // id="home"
@@ -276,5 +282,7 @@ export default function Home() {
         <TopRated />
       </div>
     );
+  } else {
+    return <Loader />;
   }
 }

@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react";
-import { FaArrowDownLong, FaCirclePlay, TiStarFullOutline,FaUserCircle } from "../icons";
+import {
+  FaArrowDownLong,
+  FaCirclePlay,
+  TiStarFullOutline,
+  FaUserCircle,
+} from "../icons";
 
 import { useParams } from "react-router-dom";
 import service from "../services/service";
 import { setTvCategory } from "../store/categorySlice";
 import { useSelector, useDispatch } from "react-redux";
 import { HashLink } from "react-router-hash-link";
+import { Loader } from "./index";
 export default function Movie() {
   const { seriesID } = useParams();
   const [series, setSeries] = useState([]);
   const [videoId, setVideoId] = useState();
   const [recommendedSeries, setRecommendedSeries] = useState([]);
+  const [pageLoader, setPageLoader] = useState(true);
   const dispatch = useDispatch();
   const genresList = useSelector((state) => state.categories.tvCategory);
 
@@ -20,6 +27,7 @@ export default function Movie() {
       // console.log("series data", data);
       if (data) {
         setSeries([data]);
+        setPageLoader(false);
       }
     });
     // console.log("movie id",movieID);
@@ -87,8 +95,6 @@ export default function Movie() {
     });
   }, []);
 
-  
-
   function getGenreName(arrayIds) {
     const result = [];
     if (genresList) {
@@ -105,7 +111,8 @@ export default function Movie() {
     return result;
   }
 
-  if (series.length > 0 && recommendedSeries.length > 0) {
+  // if (series.length > 0 && recommendedSeries.length > 0)
+  if (!pageLoader && series.length > 0) {
     return (
       <div
         className="bg-slate-950 z-0 relative overflow-x-hidden no-scrollbar"
@@ -175,17 +182,36 @@ export default function Movie() {
                   <div className="h-[200px] flex flex-col items-start gap-2">
                     <h3 className="text-xl font-semibold ">STARRING</h3>
                     <ul className="px-2 text-lg flex flex-col gap-3 overflow-y-auto no-scrollbar">
-                    {data.credits.cast.map((cast, index) => (
-                          <li key={cast.id} className="">
-                            
-                            <a className="flex gap-1" target="_blank" href={`https://www.themoviedb.org/person/${cast.id}-${(cast.name).toLowerCase()}`}>
-                              {cast.profile_path ? <><img className="w-[26px] h-[30px]  rounded-full" src={`${cast.profile_path ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`:''}`} alt="" /></>:<><FaUserCircle className="w-[26px] h-[30px]  rounded-full" /></>}
-                              {cast.name}
-                              </a>
-                            
-                          </li>
-                        ))}
-                     
+                      {data.credits.cast.map((cast, index) => (
+                        <li key={cast.id} className="">
+                          <a
+                            className="flex gap-1"
+                            target="_blank"
+                            href={`https://www.themoviedb.org/person/${
+                              cast.id
+                            }-${cast.name.toLowerCase()}`}
+                          >
+                            {cast.profile_path ? (
+                              <>
+                                <img
+                                  className="w-[26px] h-[30px]  rounded-full"
+                                  src={`${
+                                    cast.profile_path
+                                      ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`
+                                      : ""
+                                  }`}
+                                  alt=""
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <FaUserCircle className="w-[26px] h-[30px]  rounded-full" />
+                              </>
+                            )}
+                            {cast.name}
+                          </a>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
@@ -285,84 +311,104 @@ export default function Movie() {
 
           {/* cards contaier*/}
           <div className=" flex-wrap md:justify-between justify-center  overflow-x-auto no-scrollbar gap-10 md:px-10  w-full h-[90%] flex">
-            {recommendedSeries.map((data) =>
-              data.backdrop_path ? (
-                // <div
-                <HashLink
-                  key={data.id}
-                  smooth
-                  target="_blank"
-                  to={`/tv/${data.id}`}
-                  style={{
-                    backgroundImage: `url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
-                  }}
-                  className="w-[400px]  h-[400px] cursor-pointer bg-no-repeat bg-center bg-cover hover:scale-110 transition-all ease-linear duration-300 z-10 relative"
-                >
-                  {/* card cover shadow filter */}
-                  <div
-                    className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
-                    style={{
-                      boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
-                    }}
-                  ></div>
+            {recommendedSeries.length <= 0 ? (
+              <>
+                {" "}
+                <div className="w-full text-center ">
+                  <h1 className="text-4xl text-red-400 ">
+                    Lost in the data galaxy. No findings yet!
+                  </h1>
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                {recommendedSeries.map((data) =>
+                  data.backdrop_path ? (
+                    // <div
+                    <HashLink
+                      key={data.id}
+                      smooth
+                      target="_blank"
+                      to={`/tv/${data.id}`}
+                      style={{
+                        backgroundImage: `url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
+                      }}
+                      className="w-[400px]  h-[400px] cursor-pointer bg-no-repeat bg-center bg-cover hover:scale-110 transition-all ease-linear duration-300 z-10 relative"
+                    >
+                      {/* card cover shadow filter */}
+                      <div
+                        className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
+                        style={{
+                          boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
+                        }}
+                      ></div>
 
-                  {/* card content */}
-                  <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
-                    {/* upper section */}
-                    <div className="w-full flex  justify-start items-center ">
-                      {/* rating section */}
-                      <div className="relative">
-                        {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
-                        <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
-                        {/* </TiStarFullOutline> */}
-                        <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
-                          {data.vote_average.toFixed(1)}
-                        </h2>
-                      </div>
-                    </div>
+                      {/* card content */}
+                      <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
+                        {/* upper section */}
+                        <div className="w-full flex  justify-start items-center ">
+                          {/* rating section */}
+                          <div className="relative">
+                            {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
+                            <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
+                            {/* </TiStarFullOutline> */}
+                            <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
+                              {data.vote_average.toFixed(1)}
+                            </h2>
+                          </div>
+                        </div>
 
-                    {/* lower section */}
-                    <div className="flex flex-col w-full  justify-start items-start gap-2 ">
-                      {/* name */}
-                      <h1 className="w-full text-2xl font-bold">{data.name}</h1>
-                      {/* <h1 className="w-full text-2xl font-bold">title</h1> */}
+                        {/* lower section */}
+                        <div className="flex flex-col w-full  justify-start items-start gap-2 ">
+                          {/* name */}
+                          <h1 className="w-full text-2xl font-bold">
+                            {data.name}
+                          </h1>
+                          {/* <h1 className="w-full text-2xl font-bold">title</h1> */}
 
-                      <h2>
-                        First Air On :{" "}
-                        {new Date(data.first_air_date).toLocaleDateString()}
-                      </h2>
+                          <h2>
+                            First Air On :{" "}
+                            {new Date(data.first_air_date).toLocaleDateString()}
+                          </h2>
 
-                      {/* genres */}
-                      <div className=" flex gap-4 items-center text-xs w-full font-bold">
-                        {getGenreName(data.genre_ids).map((genre, index) => (
-                          <h2 key={index}>{genre}</h2>
-                        ))}
+                          {/* genres */}
+                          <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                            {getGenreName(data.genre_ids).map(
+                              (genre, index) => (
+                                <h2 key={index}>{genre}</h2>
+                              )
+                            )}
 
-                        {/* {getGenreName(data.genre_ids)} */}
-                      </div>
-                      {/* <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                            {/* {getGenreName(data.genre_ids)} */}
+                          </div>
+                          {/* <div className=" flex gap-4 items-center text-xs w-full font-bold">
                         genres list
                       </div> */}
 
-                      <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
-                        {data.original_language}
-                      </h2>
+                          <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                            {data.original_language}
+                          </h2>
 
-                      {/* <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                          {/* <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
                         movie
                       </h2> */}
-                    </div>
-                  </div>
-                </HashLink>
-              ) : (
-                // </div>
-                <></>
-              )
+                        </div>
+                      </div>
+                    </HashLink>
+                  ) : (
+                    // </div>
+                    <></>
+                  )
+                )}
+              </>
             )}
           </div>
           {/* </div> */}
         </div>
       </div>
     );
+  } else {
+    return <Loader />;
   }
 }

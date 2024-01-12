@@ -1,15 +1,22 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FaArrowDownLong, FaCirclePlay, TiStarFullOutline,FaUserCircle  } from "../icons";
+import {
+  FaArrowDownLong,
+  FaCirclePlay,
+  TiStarFullOutline,
+  FaUserCircle,
+} from "../icons";
 import { Link, useParams } from "react-router-dom";
 import service from "../services/service";
 import { setMovieCategory } from "../store/categorySlice";
 import { HashLink } from "react-router-hash-link";
+import { Loader } from "./index";
 export default function Movie() {
   const genresList = useSelector((state) => state.categories.movieCategory);
   const { movieID } = useParams();
   const [movie, setMovie] = useState([]);
   const [recommendedMovie, setRecommendedMovie] = useState([]);
+  const [pageLoader, setPageLoader] = useState(true);
   const [videoId, setVideoId] = useState();
   const dispatch = useDispatch();
 
@@ -19,6 +26,7 @@ export default function Movie() {
       // console.log("moivie data", data);
       if (data) {
         setMovie([data]);
+        // setPageLoader(false);
       }
     });
     // console.log("movie id",movieID);
@@ -87,7 +95,8 @@ export default function Movie() {
   }, []);
 
   useEffect(() => {
-    console.log("recommendedMovie", movie);
+    // console.log("recommendedMovie", movie);
+    setPageLoader(false);
   }, [movie]);
 
   function getGenreName(arrayIds) {
@@ -110,7 +119,8 @@ export default function Movie() {
     }
   }
 
-  if (movie.length > 0 && recommendedMovie.length > 0) {
+  // if (movie.length > 0 && recommendedMovie.length > 0)
+  if (!pageLoader && movie.length > 0) {
     return (
       <div
         className="bg-slate-950 z-0 relative overflow-x-hidden no-scrollbar "
@@ -186,15 +196,34 @@ export default function Movie() {
                       <ul className="px-2 text-lg  overflow-y-auto no-scrollbar gap-3 flex flex-col">
                         {data.credits.cast.map((cast, index) => (
                           <li key={cast.id} className="">
-                            
-                            <a className="flex gap-1" target="_blank" href={`https://www.themoviedb.org/person/${cast.id}-${(cast.name).toLowerCase()}`}>
-                              {cast.profile_path ? <><img className="w-[26px] h-[30px]  rounded-full" src={`${cast.profile_path ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`:''}`} alt="" /></>:<><FaUserCircle className="w-[26px] h-[30px]  rounded-full" /></>}
+                            <a
+                              className="flex gap-1"
+                              target="_blank"
+                              href={`https://www.themoviedb.org/person/${
+                                cast.id
+                              }-${cast.name.toLowerCase()}`}
+                            >
+                              {cast.profile_path ? (
+                                <>
+                                  <img
+                                    className="w-[26px] h-[30px]  rounded-full"
+                                    src={`${
+                                      cast.profile_path
+                                        ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`
+                                        : ""
+                                    }`}
+                                    alt=""
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <FaUserCircle className="w-[26px] h-[30px]  rounded-full" />
+                                </>
+                              )}
                               {cast.name}
-                              </a>
-                            
+                            </a>
                           </li>
                         ))}
-                        
                       </ul>
                     </div>
                   </div>
@@ -295,94 +324,112 @@ export default function Movie() {
 
           {/* cards container */}
           <div className=" flex-wrap justify-between overflow-x-auto no-scrollbar gap-10 md:px-10  w-full h-[90%] flex">
-            {recommendedMovie.map((movie) =>
-              movie.backdrop_path ? (
-                // <div
-                <HashLink
-                  key={movie.id}
-                  smooth
-                  target="_blank"
-                  to={`/movie/${movie.id}`}
-                  style={{
-                    backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
-                  }}
-                  className="w-[400px] h-[400px] cursor-pointer bg-no-repeat bg-center bg-cover hover:scale-110 transition-all ease-linear duration-300 z-10 relative"
-                >
-                  {/* card cover shadow filter */}
-                  <div
-                    className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
-                    style={{
-                      boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
-                    }}
-                  ></div>
+            {recommendedMovie.length <= 0 ? (
+              <>
+                <div className="w-full text-center ">
+                  <h1 className="text-4xl text-red-400 ">
+                    Lost in the data galaxy. No findings yet!
+                  </h1>
+                </div>
+              </>
+            ) : (
+              <>
+                {recommendedMovie.map((movie) =>
+                  movie.backdrop_path ? (
+                    // <div
+                    <HashLink
+                      key={movie.id}
+                      smooth
+                      target="_blank"
+                      to={`/movie/${movie.id}`}
+                      style={{
+                        backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
+                      }}
+                      className="w-[400px] h-[400px] cursor-pointer bg-no-repeat bg-center bg-cover hover:scale-110 transition-all ease-linear duration-300 z-10 relative"
+                    >
+                      {/* card cover shadow filter */}
+                      <div
+                        className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
+                        style={{
+                          boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
+                        }}
+                      ></div>
 
-                  {/* card content */}
-                  <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
-                    {/* upper section */}
-                    <div className="w-full flex  justify-start items-center ">
-                      {/* rating section */}
-                      <div className="relative">
-                        {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
-                        <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
-                        {/* </TiStarFullOutline> */}
-                        <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
-                          {movie.vote_average.toFixed(1)}
-                        </h2>
-                      </div>
-                    </div>
+                      {/* card content */}
+                      <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
+                        {/* upper section */}
+                        <div className="w-full flex  justify-start items-center ">
+                          {/* rating section */}
+                          <div className="relative">
+                            {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
+                            <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
+                            {/* </TiStarFullOutline> */}
+                            <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
+                              {movie.vote_average.toFixed(1)}
+                            </h2>
+                          </div>
+                        </div>
 
-                    {/* lower section */}
-                    <div className="flex flex-col w-full  justify-start items-start gap-2 ">
-                      {/* name */}
-                      <h1 className="w-full text-2xl font-bold">
-                        {movie.title}
-                      </h1>
-                      {/* <h1 className="w-full text-2xl font-bold">title</h1> */}
+                        {/* lower section */}
+                        <div className="flex flex-col w-full  justify-start items-start gap-2 ">
+                          {/* name */}
+                          <h1 className="w-full text-2xl font-bold">
+                            {movie.title}
+                          </h1>
+                          {/* <h1 className="w-full text-2xl font-bold">title</h1> */}
 
-                      <h2>{`${
-                        new Date(movie.release_date).getDay() + 1 < 10
-                          ? "0"
-                          : ""
-                      }${new Date(movie.release_date).getDay() + 1} / ${
-                        new Date(movie.release_date).getMonth() + 1 < 10
-                          ? "0"
-                          : ""
-                      }${
-                        new Date(movie.release_date).getMonth() + 1
-                      }/ ${new Date(movie.release_date).getFullYear()}`}</h2>
+                          <h2>{`${
+                            new Date(movie.release_date).getDay() + 1 < 10
+                              ? "0"
+                              : ""
+                          }${new Date(movie.release_date).getDay() + 1} / ${
+                            new Date(movie.release_date).getMonth() + 1 < 10
+                              ? "0"
+                              : ""
+                          }${
+                            new Date(movie.release_date).getMonth() + 1
+                          }/ ${new Date(
+                            movie.release_date
+                          ).getFullYear()}`}</h2>
 
-                      {/* <h2>data</h2> */}
+                          {/* <h2>data</h2> */}
 
-                      {/* genres */}
-                      <div className=" flex gap-4 items-center text-xs w-full font-bold">
-                        {getGenreName(movie.genre_ids).map((genre, index) => (
-                          <h2 key={index}>{genre}</h2>
-                        ))}
+                          {/* genres */}
+                          <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                            {getGenreName(movie.genre_ids).map(
+                              (genre, index) => (
+                                <h2 key={index}>{genre}</h2>
+                              )
+                            )}
 
-                        {/* {getGenreName(movie.genre_ids)} */}
-                      </div>
-                      {/* <div className=" flex gap-4 items-center text-xs w-full font-bold">
+                            {/* {getGenreName(movie.genre_ids)} */}
+                          </div>
+                          {/* <div className=" flex gap-4 items-center text-xs w-full font-bold">
                         genres list
                       </div> */}
 
-                      <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
-                        {movie.original_language}
-                      </h2>
+                          <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                            {movie.original_language}
+                          </h2>
 
-                      {/* <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
+                          {/* <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
                         movie
                       </h2> */}
-                    </div>
-                  </div>
-                </HashLink>
-              ) : (
-                // </div>
-                <></>
-              )
+                        </div>
+                      </div>
+                    </HashLink>
+                  ) : (
+                    // </div>
+                    <></>
+                  )
+                )}
+              </>
             )}
           </div>
         </div>
       </div>
     );
+  } else {
+    return <Loader />;
   }
 }
