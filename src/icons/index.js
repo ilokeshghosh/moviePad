@@ -6,5 +6,6 @@ import { IoMdTrendingUp } from "react-icons/io";
 import { MdOutlineCategory } from "react-icons/md";
 import { MdOutlineMovieFilter } from "react-icons/md";
 import { TiStarFullOutline } from "react-icons/ti";
+import { FaUserCircle } from "react-icons/fa";
 
-export {FaChevronLeft,FaChevronRight,AiOutlineSwapRight,AiOutlineSwapLeft,FaArrowDownLong,LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter,TiStarFullOutline,FaCirclePlay};
+export {FaChevronLeft,FaChevronRight,AiOutlineSwapRight,AiOutlineSwapLeft,FaArrowDownLong,LuHome,IoMdTrendingUp,MdOutlineCategory,MdOutlineMovieFilter,TiStarFullOutline,FaCirclePlay,FaUserCircle};

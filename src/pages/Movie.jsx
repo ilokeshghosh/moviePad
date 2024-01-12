@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FaArrowDownLong, FaCirclePlay, TiStarFullOutline } from "../icons";
+import { FaArrowDownLong, FaCirclePlay, TiStarFullOutline,FaUserCircle  } from "../icons";
 import { data } from "../Components/data";
 import { Link, useParams } from "react-router-dom";
 import service from "../services/service";
@@ -189,16 +189,13 @@ export default function Movie() {
                           <li key={cast.id} className="">
                             
                             <a className="flex gap-1" target="_blank" href={`https://www.themoviedb.org/person/${cast.id}-${(cast.name).toLowerCase()}`}>
-                            <img className="w-[26px] h-[30px]  rounded-full" src={`${cast.profile_path ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`:''}`} alt="" />
+                              {cast.profile_path ? <><img className="w-[26px] h-[30px]  rounded-full" src={`${cast.profile_path ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`:''}`} alt="" /></>:<><FaUserCircle className="w-[26px] h-[30px]  rounded-full" /></>}
                               {cast.name}
                               </a>
                             
                           </li>
                         ))}
-                        {/* <li className="">Actor 1</li>
-                        <li>Actor 2</li>
-                        <li>Actor 3</li>
-                        <li>Actor 4</li> */}
+                        
                       </ul>
                     </div>
                   </div>

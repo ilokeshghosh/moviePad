@@ -35,7 +35,7 @@ class service {
     }
     async getTvByID(id) {
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US&api_key=${conf.apiKey}`)
+            const response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US&api_key=${conf.apiKey}&append_to_response=credits`)
             if (response.ok) {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
