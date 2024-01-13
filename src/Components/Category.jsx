@@ -161,6 +161,18 @@ export default function Category() {
                     boxShadow: "inset 0px -100px 120px 10px rgb(2 6 23)",
                   }}
                 ></div>
+
+                {movie.backdrop_path ? (
+                  <></>
+                ) : (
+                  <>
+                    {" "}
+                    <h1 className="text-red-400 font-bold text-lg absolute top-[30%] left-[30%]">
+                      Oops! Image lost in space.
+                    </h1>
+                  </>
+                )}
+                
                 {/* card content */}
                 <div className="absolute bottom-0 left-0 w-full h-full flex flex-col  px-5  justify-between items-start py-4">
                   {/* upper section */}

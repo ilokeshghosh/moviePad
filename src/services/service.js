@@ -11,8 +11,9 @@ class service {
                     const data = await response.json()
                     return data.results;
                 }
+            } else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
-
         } catch (error) {
             throw error;
 
@@ -29,6 +30,8 @@ class service {
                     const data = await response.json();
                     return data;
                 }
+            } else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -43,6 +46,8 @@ class service {
                     const data = await response.json();
                     return data;
                 }
+            } else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -60,6 +65,8 @@ class service {
                     // console.log('data at service', data);
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -77,6 +84,8 @@ class service {
                     // console.log('data at service', data);
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -96,6 +105,8 @@ class service {
                     // console.log('data', data.results);
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -113,6 +124,8 @@ class service {
                     // console.log('data',data.genres);
                     return data.genres;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -130,6 +143,8 @@ class service {
                     const data = await response.json()
                     return data.genres;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -146,6 +161,8 @@ class service {
                     const data = await response.json()
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -162,6 +179,8 @@ class service {
                     const data = await response.json();
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -188,6 +207,8 @@ class service {
                     const data = await response.json()
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -202,6 +223,8 @@ class service {
                     const data = await response.json();
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -219,6 +242,8 @@ class service {
                             const data = await response.json()
                             return data.results;
                         }
+                    }else if (response.status === 404) {
+                        throw new Error(`${response.status}`)
                     }
                     break;
                 case 'tv':
@@ -230,6 +255,8 @@ class service {
                             const data = await TvResponse.json()
                             return data.results;
                         }
+                    }else if (response.status === 404) {
+                        throw new Error(`${response.status}`)
                     }
                     break;
                 default:
@@ -244,13 +271,15 @@ class service {
     // search movie
     async searchMovie(query) {
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=true&language=en-US&page=1&api_key=${conf.apiKey}`)
+            const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1&api_key=${conf.apiKey}`)
             if (response.ok) {
                 const contentType = response.headers.get('content-type');
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json()
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;
@@ -260,13 +289,15 @@ class service {
     // search tv 
     async searchTv(query) {
         try {
-            const response = await fetch(`https://api.themoviedb.org/3/search/tv?query=${query}&include_adult=true&language=en-US&page=1&api_key=${conf.apiKey}`)
+            const response = await fetch(`https://api.themoviedb.org/3/search/tv?query=${query}&include_adult=false&language=en-US&page=1&api_key=${conf.apiKey}`)
             if (response.ok) {
                 const contentType = response.headers.get('content-type')
                 if (contentType && contentType.includes('application/json')) {
                     const data = await response.json()
                     return data.results;
                 }
+            }else if (response.status === 404) {
+                throw new Error(`${response.status}`)
             }
         } catch (error) {
             throw error;

@@ -11,13 +11,14 @@ import service from "../services/service";
 import { setTvCategory } from "../store/categorySlice";
 import { useSelector, useDispatch } from "react-redux";
 import { HashLink } from "react-router-hash-link";
-import { Loader } from "./index";
+import { Loader, Error } from "./index";
 export default function Movie() {
   const { seriesID } = useParams();
   const [series, setSeries] = useState([]);
   const [videoId, setVideoId] = useState();
   const [recommendedSeries, setRecommendedSeries] = useState([]);
   const [pageLoader, setPageLoader] = useState(true);
+  const [errorPage, setErrorPage] = useState(false);
   const dispatch = useDispatch();
   const genresList = useSelector((state) => state.categories.tvCategory);
   const errorText = useSelector((state) => state.errorReducer.errorText);
@@ -35,6 +36,10 @@ export default function Movie() {
         }
       })
       .catch((error) => {
+        if (error.message === "404") {
+          setErrorPage(true);
+          // console.log(error.message);
+        }
         dispatch(updateStatus(error.message));
         setTimeout(() => {
           dispatch(clearStatus());
@@ -125,12 +130,20 @@ export default function Movie() {
         setRecommendedSeries(data);
       })
       .catch((error) => {
+        if (error.message === "404") {
+          setErrorPage(true);
+          // console.log(error.message);
+        }
         dispatch(updateStatus(error.message));
         setTimeout(() => {
           dispatch(clearStatus());
         }, 3000);
       });
   }, []);
+
+  useEffect(() => {
+    setPageLoader(false);
+  }, [series]);
 
   function getGenreName(arrayIds) {
     const result = [];
@@ -181,6 +194,17 @@ export default function Movie() {
                 style={{ boxShadow: "inset 0px -30px 30px 0px rgb(2 6 23)" }}
               ></div>
 
+              {data.backdrop_path ? (
+                <></>
+              ) : (
+                <>
+                  {" "}
+                  <h1 className="text-red-400 font-bold text-lg absolute md:top-[30%] top-[20%] left-[45%]">
+                    Oops! Image lost in space.
+                  </h1>
+                </>
+              )}
+
               {/* scroll down button */}
               <div className="absolute bottom-[36%]  md:inline-block hidden left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
                 <FaArrowDownLong />
@@ -191,7 +215,7 @@ export default function Movie() {
                 {/* upper section /title*/}
                 <div className="w-full md:text-start  text-center   md:pt-10 pt-4 h-1/3 ">
                   {/* title */}
-                  <h1 className="md:text-[6rem] text-[4rem] font-bold ">
+                  <h1 className="md:text-[6rem] text-[2.5rem] font-bold ">
                     {data.name}
                   </h1>
                 </div>
@@ -445,6 +469,8 @@ export default function Movie() {
         </div>
       </div>
     );
+  } else if (errorPage) {
+    return <Error />;
   } else {
     return <Loader />;
   }

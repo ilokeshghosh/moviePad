@@ -163,7 +163,7 @@ export default function Search() {
             });
           break;
         default:
-          dispatch(updateStatus('invalid input'));
+          dispatch(updateStatus("invalid input"));
           setTimeout(() => {
             dispatch(clearStatus());
           }, 3000);
@@ -183,19 +183,24 @@ export default function Search() {
   return (
     <div
       id="search"
-      className="text-white pt-20 h-screen z-0 relative flex flex-col gap-10"
+      className="text-white md:pt-20 pt-10 h-screen z-0 relative flex flex-col gap-10"
     >
+      {/* bg vectors */}
+      <div className="z-[10]">
+        <div className="absolute top-[-20%] md:inline-block hidden   z-[-1]  -left-[3%]  bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
+      </div>
+
       {/* search wrapper */}
       <div className="flex  w-full  gap-6 md:pl-32 md:flex-row flex-col">
         {/* search container */}
-        <div className="bg-black md:w-[60%] mx-auto  flex items-center relative  rounded-lg text-xl py-2 md:py-4 ">
+        <div className="bg-black md:w-[60%] mx-auto  flex items-center relative  rounded-lg text-xl py-1 md:py-4 z-[10]">
           <form
             onSubmit={handleForm}
             name="searchForm"
-            className=" flex w-full items-center gap-6 justify-between px-2 h-full"
+            className=" flex w-full items-center gap-2 justify-between px-2 h-full"
           >
             <select
-              className="bg-transparent outline-none text-center"
+              className="bg-transparent text-base md:text-xl outline-none text-center selection:bg-transparent"
               name="type"
               id="type"
               onInput={(e) => setOption(e.target.value)}
@@ -210,7 +215,8 @@ export default function Search() {
             <input
               onInput={(e) => setQuery(e.target.value)}
               value={query}
-              className="w-[80%] bg-transparent h-full outline-none"
+              placeholder="Enter the cinematic cosmos...."
+              className="md:w-[80%] w-[90%] bg-transparent h-full outline-none  text-white"
               type="text"
               name="query"
               id="query"
@@ -218,7 +224,7 @@ export default function Search() {
 
             <span className="h-[60%] border "></span>
             <input
-              className="px-3 cursor-pointer"
+              className="px-3 cursor-pointer selection:bg-transparent"
               type="submit"
               value="Search"
             />
@@ -230,7 +236,7 @@ export default function Search() {
       <div className="flex flex-wrap gap-10 md:px-10 overflow-x-auto no-scrollbar justify-between  h-full">
         {searchedData.length <= 0 ? (
           <>
-            <h1 className="text-center  w-full text-3xl text-red-400 h-full  flex justify-center items-center">
+            <h1 className="text-center  w-full text-3xl text-red-400 h-full  flex justify-center items-center selection:bg-transparent">
               {conditionalText}
             </h1>
           </>

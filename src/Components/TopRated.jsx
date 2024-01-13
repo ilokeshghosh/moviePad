@@ -250,23 +250,23 @@ export default function TopRated() {
                     <h2>
                       {`
                       ${
-                        new Date(data.release_date).getDay() ||
-                        new Date(data.first_air_date).getDate() < 10
+                        new Date(data.release_date).getDay() + 1 < 10 ||
+                        new Date(data.first_air_date).getDate() + 1 < 10
                           ? "0"
                           : ""
                       }${
-                        new Date(data.release_date).getDay() ||
-                        new Date(data.first_air_date).getDate()
+                        new Date(data.release_date).getDay()  + 1 ||
+                        new Date(data.first_air_date).getDate()  + 1 
                       } 
                       
                       / 
                       ${
-                        new Date(data.release_date).getMonth() ||
+                        new Date(data.release_date).getMonth()  + 1 < 10 ||
                         new Date(data.first_air_date).getMonth() + 1 < 10
                           ? "0"
                           : ""
                       }${
-                        new Date(data.release_date).getMonth() ||
+                        new Date(data.release_date).getMonth()  + 1 ||
                         new Date(data.first_air_date).getMonth() + 1
                       }
                       

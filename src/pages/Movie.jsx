@@ -11,13 +11,15 @@ import { Link, useParams } from "react-router-dom";
 import service from "../services/service";
 import { setMovieCategory } from "../store/categorySlice";
 import { HashLink } from "react-router-hash-link";
-import { Loader } from "./index";
+import { Loader, Error } from "./index";
 import { updateStatus, clearStatus } from "../store/errorSlice";
+
 export default function Movie() {
   const genresList = useSelector((state) => state.categories.movieCategory);
   const { movieID } = useParams();
   const [movie, setMovie] = useState([]);
   const [recommendedMovie, setRecommendedMovie] = useState([]);
+  const [errorPage, setErrorPage] = useState(false);
   const [pageLoader, setPageLoader] = useState(true);
   const [videoId, setVideoId] = useState();
   const dispatch = useDispatch();
@@ -32,10 +34,14 @@ export default function Movie() {
         // console.log("moivie data", data);
         if (data) {
           setMovie([data]);
-          // setPageLoader(false);
         }
       })
       .catch((error) => {
+        // setPageLoader(false)
+        if (error.message === "404") {
+          setErrorPage(true);
+          // console.log(error.message);
+        }
         dispatch(updateStatus(error.message));
         setTimeout(() => {
           dispatch(clearStatus());
@@ -93,17 +99,20 @@ export default function Movie() {
           }
         } else {
           // api call
-          service.getMovieCategoriesList().then((data) => {
-            if (data) {
-              dispatch(setMovieCategory(data));
-              localStorage.setItem("movieGenres", JSON.stringify(data));
-            }
-          }).catch((error) => {
-            dispatch(updateStatus(error.message));
-            setTimeout(() => {
-              dispatch(clearStatus());
-            }, 3000);
-          });
+          service
+            .getMovieCategoriesList()
+            .then((data) => {
+              if (data) {
+                dispatch(setMovieCategory(data));
+                localStorage.setItem("movieGenres", JSON.stringify(data));
+              }
+            })
+            .catch((error) => {
+              dispatch(updateStatus(error.message));
+              setTimeout(() => {
+                dispatch(clearStatus());
+              }, 3000);
+            });
         }
       } catch (error) {
         dispatch(updateStatus(error.message));
@@ -116,15 +125,18 @@ export default function Movie() {
 
   //recommended code
   useEffect(() => {
-    service.recommendedMovie(movieID).then((data) => {
-      // console.log('recommended movie',data)
-      setRecommendedMovie(data);
-    }).catch((error) => {
-      dispatch(updateStatus(error.message));
-      setTimeout(() => {
-        dispatch(clearStatus());
-      }, 3000);
-    });
+    service
+      .recommendedMovie(movieID)
+      .then((data) => {
+        // console.log('recommended movie',data)
+        setRecommendedMovie(data);
+      })
+      .catch((error) => {
+        dispatch(updateStatus(error.message));
+        setTimeout(() => {
+          dispatch(clearStatus());
+        }, 3000);
+      });
   }, []);
 
   useEffect(() => {
@@ -216,6 +228,17 @@ export default function Movie() {
                   className=" h-[15%]   left-0 absolute bottom-0  w-full z-[20] "
                   style={{ boxShadow: "inset 0px -30px 30px 0px rgb(2 6 23)" }}
                 ></div>
+
+                {data.backdrop_path ? (
+                  <></>
+                ) : (
+                  <>
+                    {" "}
+                    <h1 className="text-red-400 font-bold text-lg absolute md:top-[30%] top-[20%] left-[45%]">
+                      Oops! Image lost in space.
+                    </h1>
+                  </>
+                )}
 
                 {/* scroll down button */}
                 <div className="absolute bottom-[36%] md:inline-block hidden left-[45%] md:left-[55%]  mx-auto text-white z-0 text-3xl animate-bounce">
@@ -492,6 +515,8 @@ export default function Movie() {
         </div>
       </div>
     );
+  } else if (errorPage) {
+    return <Error />;
   } else {
     return <Loader />;
   }
