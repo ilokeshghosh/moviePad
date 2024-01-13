@@ -1,64 +1,26 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import service from "../services/service";
 import { TiStarFullOutline } from "../icons/index";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { setMovieCategory, setTvCategory } from "../store/categorySlice";
 import { updateStatus, clearStatus } from "../store/errorSlice";
 
-export default function TopRated() {
+export default function Search() {
+  const [option, setOption] = useState("movie");
+  const [query, setQuery] = useState("");
+  const [searchedData, setSearchedData] = useState([]);
+  const dispatch = useDispatch();
+  const [conditionalText, setConditionalText] = useState(
+    "Lost in the cosmos of possibilities! Enter a celestial query to navigate our universe."
+  );
+
   const movieGenresList = useSelector(
     (state) => state.categories.movieCategory
   );
   const tvGenresList = useSelector((state) => state.categories.tvCategory);
-  const dispatch = useDispatch();
 
-  const [type, setType] = useState();
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  function handleFreeToWatch(e, name) {
-    document.querySelectorAll(".freeToWatch").forEach((filter) => {
-      filter.classList.remove("px-8", "rounded-full", "py-1", "bg-slate-500");
-    });
-    e.currentTarget.classList.add(
-      "px-8",
-      "rounded-full",
-      "py-1",
-      "bg-slate-500"
-    );
-
-    service
-      .topRated(name)
-      .then((data) => {
-        if (data) {
-          setTopRatedMovies(data);
-          setType(name);
-        }
-      })
-      .catch((error) => {
-        dispatch(updateStatus(error.message));
-        setTimeout(() => {
-          dispatch(clearStatus());
-        }, 3000);
-      });
-  }
-
-  useEffect(() => {
-    const name = "movie";
-    service
-      .topRated(name)
-      .then((data) => {
-        if (data) {
-          setType("movie");
-          setTopRatedMovies(data);
-        }
-      })
-      .catch((error) => {
-        dispatch(updateStatus(error.message));
-        setTimeout(() => {
-          dispatch(clearStatus());
-        }, 3000);
-      });
-  }, []);
+  // Exploring the unknown, but your query didn't light up the stars. Try another cosmic search or chart a new course!
 
   // checking for movie genres list
   useEffect(() => {
@@ -140,7 +102,7 @@ export default function TopRated() {
     const result = [];
     if (tvGenresList && movieGenresList) {
       arrayIds.forEach((id) => {
-        type === "tv"
+        option === "tv"
           ? tvGenresList.map((genre, index) => {
               if (genre.id === id && genre.name) {
                 result.push(genre.name);
@@ -162,54 +124,122 @@ export default function TopRated() {
     return result;
   }
 
-  if (topRatedMovies.length > 0) {
-    return (
-      <div
-        id="topRated"
-        className="relative  text-white mt-52 pt-20 pb-20 md:pb-0 "
-      >
-        {/* background vectors */}
-        <div className="">
-          <div className="absolute z-10 hidden top-[60%] border bg-slate-500  inline-block   -left-[15%] bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
-          <div className="absolute -bottom-[10%]   z-10   right-[2%] bg-center bg-no-repeat bg-cover  h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
-        </div>
+  function handleForm(e) {
+    e.preventDefault();
+    if (option && query) {
+      switch (option) {
+        case "movie":
+          service
+            .searchMovie(query)
+            .then((data) => {
+              if (data.length > 0) {
+                setSearchedData(data);
+              } else {
+                setConditionalText(
+                  `Exploring the unknown, but your query didn't light up the stars. Try another cosmic search or chart a new course!`
+                );
+              }
+            })
+            .catch((error) => {
+              dispatch(updateStatus(error.message));
+              setTimeout(() => {
+                dispatch(clearStatus());
+              }, 3000);
+            });
+          break;
+        case "tv":
+          service
+            .searchTv(query)
+            .then((data) => {
+              if (data) {
+                setSearchedData(data);
+              }
+            })
+            .catch((error) => {
+              dispatch(updateStatus(error.message));
+              setTimeout(() => {
+                dispatch(clearStatus());
+              }, 3000);
+            });
+          break;
+        default:
+          dispatch(updateStatus('invalid input'));
+          setTimeout(() => {
+            dispatch(clearStatus());
+          }, 3000);
+      }
+    } else {
+      setConditionalText(
+        `Lost in the cosmos of possibilities! Enter a celestial query to navigate our universe.`
+      );
+      setSearchedData([]);
+    }
+  }
 
-        {/* category section */}
-        <div className="w-full h-screen z-50  flex flex-col gap-10">
-          {/* filter bar container */}
-          <div className=" w-full items-center  justify-start flex flex-col md:flex-row md:gap-10 px-10 gap-3">
-            <h2 className=" text-4xl text-center  w-[80%] md:w-[30%] xl:w-[20%]">
-              Top Rated
-            </h2>
-            {/* filter bar */}
-            <div
-              className="xl:w-[20%] md:w-[30%] w-full   bg-black z-[100]   rounded-full h-14 flex justify-center items-center"
-              style={{ zIndex: "" }}
+  useEffect(() => {
+    // console.log('ho on',option)
+  }, [option]);
+
+  return (
+    <div
+      id="search"
+      className="text-white pt-20 h-screen z-0 relative flex flex-col gap-10"
+    >
+      {/* search wrapper */}
+      <div className="flex  w-full  gap-6 md:pl-32 md:flex-row flex-col">
+        {/* search container */}
+        <div className="bg-black md:w-[60%] mx-auto  flex items-center relative  rounded-lg text-xl py-2 md:py-4 ">
+          <form
+            onSubmit={handleForm}
+            name="searchForm"
+            className=" flex w-full items-center gap-6 justify-between px-2 h-full"
+          >
+            <select
+              className="bg-transparent outline-none text-center"
+              name="type"
+              id="type"
+              onInput={(e) => setOption(e.target.value)}
             >
-              <ul className="xl:w-[80%]  w-full  flex justify-between    text-2xl items-center h-full">
-                <li
-                  className="freeToWatch h-full w-1/2 px-6 rounded-full py-1  bg-slate-500 cursor-pointer selection:bg-transparent flex justify-center items-center"
-                  onClick={(e) => handleFreeToWatch(e, "movie")}
-                >
-                  Movies
-                </li>
+              <option className=" bg-black" value="movie">
+                Movie
+              </option>
+              <option className=" bg-black" value="tv">
+                Tv
+              </option>
+            </select>
+            <input
+              onInput={(e) => setQuery(e.target.value)}
+              value={query}
+              className="w-[80%] bg-transparent h-full outline-none"
+              type="text"
+              name="query"
+              id="query"
+            />
 
-                <li
-                  className="freeToWatch h-full w-1/2 cursor-pointer selection:bg-transparent flex justify-center items-center"
-                  onClick={(e) => handleFreeToWatch(e, "tv")}
-                >
-                  TV
-                </li>
-              </ul>
-            </div>
-          </div>
+            <span className="h-[60%] border "></span>
+            <input
+              className="px-3 cursor-pointer"
+              type="submit"
+              value="Search"
+            />
+          </form>
+        </div>
+      </div>
 
-          {/* lower section */}
-          <div className="flex flex-wrap gap-10 md:px-10 overflow-x-auto no-scrollbar justify-between">
-            {topRatedMovies.map((data, index) => (
+      {/* result container */}
+      <div className="flex flex-wrap gap-10 md:px-10 overflow-x-auto no-scrollbar justify-between  h-full">
+        {searchedData.length <= 0 ? (
+          <>
+            <h1 className="text-center  w-full text-3xl text-red-400 h-full  flex justify-center items-center">
+              {conditionalText}
+            </h1>
+          </>
+        ) : (
+          <>
+            {searchedData.map((data, index) => (
               <Link
                 to={`${
-                  type === "movie" ? `/movie/${data.id}` : `/tv/${data.id}`
+                  option === "movie" ? `/movie/${data.id}` : `/tv/${data.id}`
                 }`}
                 key={index}
                 className="w-[400px] hover:scale-110 transition-all duration-300 ease-linear h-[400px] cursor-pointer mx-auto  z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9"
@@ -219,6 +249,16 @@ export default function TopRated() {
               >
                 {" "}
                 {/* card cover shadow filter */}
+                {data.backdrop_path ? (
+                  <></>
+                ) : (
+                  <>
+                    {" "}
+                    <h1 className="text-red-400 font-bold text-lg absolute top-[30%] left-[30%]">
+                      Oops! Image lost in space.
+                    </h1>
+                  </>
+                )}
                 <div
                   className=" z-[-1] hover:shadow-none transition-all ease-linear duration-200  absolute top-0 left-0 w-full h-full"
                   style={{
@@ -249,32 +289,32 @@ export default function TopRated() {
                     {/* first_air_date */}
                     <h2>
                       {`
-                      ${
-                        new Date(data.release_date).getDay() ||
-                        new Date(data.first_air_date).getDate() < 10
-                          ? "0"
-                          : ""
-                      }${
+                     ${
+                       new Date(data.release_date).getDay() < 10 ||
+                       new Date(data.first_air_date).getDate() < 10
+                         ? "0"
+                         : ""
+                     }${
                         new Date(data.release_date).getDay() ||
                         new Date(data.first_air_date).getDate()
                       } 
-                      
-                      / 
-                      ${
-                        new Date(data.release_date).getMonth() ||
-                        new Date(data.first_air_date).getMonth() + 1 < 10
-                          ? "0"
-                          : ""
-                      }${
+                     
+                     / 
+                     ${
+                       new Date(data.release_date).getMonth() < 10 ||
+                       new Date(data.first_air_date).getMonth() + 1 < 10
+                         ? "0"
+                         : ""
+                     }${
                         new Date(data.release_date).getMonth() ||
                         new Date(data.first_air_date).getMonth() + 1
                       }
-                      
-                      /
-                      ${
-                        new Date(data.release_date).getFullYear() ||
-                        new Date(data.first_air_date).getFullYear()
-                      }`}
+                     
+                     /
+                     ${
+                       new Date(data.release_date).getFullYear() ||
+                       new Date(data.first_air_date).getFullYear()
+                     }`}
                     </h2>
 
                     {/* genres */}
@@ -291,9 +331,9 @@ export default function TopRated() {
                 </div>
               </Link>
             ))}
-          </div>
-        </div>
+          </>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 }

@@ -7,6 +7,7 @@ import {
   HeroSection,
   Category,
   TopRated,
+  Search,
 } from "../Components";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,6 +16,7 @@ import {
   MdOutlineCategory,
   MdOutlineMovieFilter,
   VscErrorSmall,
+  IoMdSearch,
 } from "../icons/index";
 // import "./Home.css";
 import { useState, useEffect } from "react";
@@ -36,6 +38,7 @@ export default function Home() {
     trending: false,
     category: false,
     topRated: false,
+    search: false,
   });
 
   function handleFreeToWatch(e) {
@@ -49,13 +52,6 @@ export default function Home() {
       "bg-slate-500"
     );
   }
-
-  useEffect(() => {
-    dispatch(updateStatus("errro errro errror"));
-    setTimeout(() => {
-      dispatch(clearStatus());
-    }, 3000);
-  }, [heroSlider]);
 
   // api calls
   useEffect(() => {
@@ -181,6 +177,7 @@ export default function Home() {
                     trending: false,
                     category: false,
                     topRated: false,
+                    search: false,
                   })
                 }
                 className={`${
@@ -214,6 +211,7 @@ export default function Home() {
                     trending: true,
                     category: false,
                     topRated: false,
+                    search: false,
                   })
                 }
                 className={`${
@@ -246,6 +244,7 @@ export default function Home() {
                     trending: false,
                     category: true,
                     topRated: false,
+                    search: false,
                   })
                 }
                 className={`${
@@ -278,6 +277,7 @@ export default function Home() {
                     trending: false,
                     category: false,
                     topRated: true,
+                    search: false,
                   })
                 }
                 className={`${
@@ -293,6 +293,38 @@ export default function Home() {
                 <h2
                   className={` transition-all duration-500 ease-linear  ${
                     activeNavbar.topRated
+                      ? "md:w-full  w-0 mx-auto md:mx-0  border border-slate-100/60"
+                      : "w-0 border-none mx-auto"
+                  }`}
+                ></h2>
+              </NavHashLink>
+            </li>
+            <li>
+              <NavHashLink
+                smooth
+                to={"/#search"}
+                onClick={() =>
+                  setActiveNavbar({
+                    home: false,
+                    trending: false,
+                    category: false,
+                    topRated: false,
+                    search: true,
+                  })
+                }
+                className={`${
+                  activeNavbar.search ? "text-red-500 font-bold " : ""
+                } flex flex-col`}
+              >
+                <div className="transition-all ease-linear duration-500">
+                  <h1 className="hidden md:inline-block">Search</h1>{" "}
+                  <h1 className="md:hidden text-2xl">
+                    <IoMdSearch />
+                  </h1>
+                </div>
+                <h2
+                  className={` transition-all duration-500 ease-linear  ${
+                    activeNavbar.search
                       ? "md:w-full  w-0 mx-auto md:mx-0  border border-slate-100/60"
                       : "w-0 border-none mx-auto"
                   }`}
@@ -315,7 +347,7 @@ export default function Home() {
 
             <div className="absolute top-[65%]  left-[1%] bg-center  bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
 
-            <div className="absolute bottom-[0%]  right-[10%] bg-center hidden border bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
+            <div className="absolute bottom-[0%]   right-[10%] bg-center hidden border bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
             <div className="absolute bottom-[20%]  right-[50%] bg-center  hidden bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
           </div>
 
@@ -331,6 +363,9 @@ export default function Home() {
 
         {/* top to Watch section */}
         <TopRated />
+
+        {/* search section */}
+        <Search />
       </div>
     );
   } else {

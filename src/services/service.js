@@ -15,7 +15,7 @@ class service {
 
         } catch (error) {
             throw error;
-            
+
         }
     }
 
@@ -233,12 +233,44 @@ class service {
                     }
                     break;
                 default:
-                    // console.log('invalid input',name);
+                // console.log('invalid input',name);
             }
         } catch (error) {
             throw error;
         }
 
+    }
+
+    // search movie
+    async searchMovie(query) {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=true&language=en-US&page=1&api_key=${conf.apiKey}`)
+            if (response.ok) {
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json()
+                    return data.results;
+                }
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    // search tv 
+    async searchTv(query) {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/search/tv?query=${query}&include_adult=true&language=en-US&page=1&api_key=${conf.apiKey}`)
+            if (response.ok) {
+                const contentType = response.headers.get('content-type')
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json()
+                    return data.results;
+                }
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 }
 

@@ -5,4 +5,5 @@ import HeroSection from "./HeroSection";
 import HeroSlider from './HeroSlider';
 import Category from "./Category";
 import TopRated from "./TopRated";
-export {Trending,MovieSlider,ComingSoon,HeroSection,HeroSlider,Category,TopRated};
+import Search from "./Search";
+export {Trending,MovieSlider,ComingSoon,HeroSection,HeroSlider,Category,TopRated,Search};
