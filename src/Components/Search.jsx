@@ -183,7 +183,7 @@ export default function Search() {
   return (
     <div
       id="search"
-      className="text-white md:pt-20 pt-10 h-screen z-0 relative flex flex-col gap-10"
+      className="text-white md:pt-20 pt-14 h-screen z-0 relative flex flex-col gap-10"
     >
       {/* bg vectors */}
       <div className="z-[10]">
@@ -193,7 +193,7 @@ export default function Search() {
       {/* search wrapper */}
       <div className="flex  w-full  gap-6 md:pl-32 md:flex-row flex-col">
         {/* search container */}
-        <div className="bg-black md:w-[60%] mx-auto  flex items-center relative  rounded-lg text-xl py-1 md:py-4 z-[10]">
+        <div className="bg-black md:w-[60%] mx-auto  flex items-center relative  rounded-lg text-base md:text-xl  py-1 md:py-4 z-[10]">
           <form
             onSubmit={handleForm}
             name="searchForm"
@@ -215,8 +215,8 @@ export default function Search() {
             <input
               onInput={(e) => setQuery(e.target.value)}
               value={query}
-              placeholder="Enter the cinematic cosmos...."
-              className="md:w-[80%] w-[90%] bg-transparent h-full outline-none  text-white"
+              placeholder="Explore films here..."
+              className="md:w-[80%] w-[90%] bg-transparent h-full outline-none  text-white "
               type="text"
               name="query"
               id="query"

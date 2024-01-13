@@ -60,7 +60,7 @@ export default function HeroSlider({ sliderData }) {
                     {/* image card*/}
                     {/* <Link className="z-10 border md:h-[400px] h-[300px]" to={`/movie/${slide.id}`}> */}
                     <Link
-                      className="w-full md:h-[400px] h-[300px] z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9 "
+                      className="w-full  md:h-[400px] h-[300px] z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9 bottom-8 md:bottom-0"
                       to={`/movie/${slide.id}`}
                       style={{
                         backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.poster_path})`,

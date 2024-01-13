@@ -280,7 +280,7 @@ export default function Movie() {
                 {/* lower section / button and movie desc */}
                 <div className="flex justify-start flex-col md:flex-row  md:gap-20 gap-3 md:pt-18 z-50 h-1/3 px-1 md:px-0 ">
                   {/* trailer section */}
-                  <div className="w-[20%]   md:w-[5%]">
+                  <div className="w-[20%]   md:w-[5%] md:static relative top-0 mx-auto md:mx-0">
                     <button className="border-2 px-4 rounded-xl ">
                       <a
                         className="flex justify-center items-center gap-2 font-bold"

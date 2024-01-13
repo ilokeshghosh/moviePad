@@ -409,7 +409,7 @@ export default function Movie() {
           </div>
 
           {/* cards container */}
-          <div className=" flex-wrap justify-between overflow-x-auto no-scrollbar gap-10 md:px-10  w-full h-[90%] flex">
+          <div className=" flex-wrap md:justify-between justify-center overflow-x-auto no-scrollbar gap-10 md:px-10  w-full h-[90%] flex">
             {recommendedMovie.length <= 0 ? (
               <>
                 <div className="w-full text-center ">
