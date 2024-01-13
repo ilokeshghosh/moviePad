@@ -54,8 +54,8 @@ Dive deep into the world of your chosen movie or TV series with detailed pages f
 
 ## Technologies Used
 - React(<img src="https://vitejs.dev/logo.svg" width="20" alt="React Logo">) : For Frontend
-- TMDB(The Movie Database)(<img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg" width="30" alt="React Logo">): API 
-- Postman (<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAXVBMVEUAAAD/cED/ajX/azf/bDf/bDb/bDf/azb/aDj/bDf/bTf/bTX/azf/bDf/ajX/bDb/cDD/bDf/bDb/bTX/bDf/azf/bTf/bDb/bDb/azb/bDj/bDb/bjf/bDj/ajhLM8F2AAAAH3RSTlMAEGCfz+//XyCQj4/fvzCgEO/PYK9w34BQoIB/T0Bgzb7ZEAAAAN1JREFUeAF1kolugzAQRMcYT5dkUyhtQ3r+/2dWGalaQbxPJ7zZw7IRlKGOjWxjfTI8YlNjUI+RcuKBc9mVOx+4IHjueLesPrwZRMm8e1HglHnyrAF9r71oAOa+b7wzAUvmxUvBkPrVSb5iznyFacaaeL4BF3JF63uNfyevyDxp2g+pd2AjiZZ4btrhqiXj1xJ54KZL/9i/gE/+83VzHXNgUJXY8a2mecIBTMwT+jbmCRrUIk1suLN4lnBAWJJwS569EuGzHmN4qOKYKNhjM4P2gw7ld14b2dY6RDX+ALhIFgGJ//ETAAAAAElFTkSuQmCC" width="20" alt="React Logo">) : For API Testing
+- TMDB(The Movie Database)(<img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_1-5bdc75aaebeb75dc7ae79426ddd9be3b2be1e342510f8202baf6bffa71d7f5c4.svg" width="30" alt="tmdb logo">): API 
+- Postman (<img src="https://ik.imagekit.io/8fgpvoiai/MoviePad/documentation/postman_gw8qc7pJ9.svg?updatedAt=1705161397136" width="20" alt="postman logo">) : For API Testing
 
 ## Design
 ### 👉🏻 [Figma](https://www.figma.com/file/2ScaqHJAzPHYhtlqdlCwN4/moivePad?type=design&node-id=0%3A1&mode=design&t=x9a8KWmCIncL80EW-1) 👈🏻
