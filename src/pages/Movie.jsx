@@ -400,7 +400,7 @@ export default function Movie() {
         >
           {/* upper section */}
           <div className=" flex justify-between w-[80%] mx-auto">
-            <h2 className="md:text-5xl text-3xl font-semibold">Recomanded</h2>
+            <h2 className="md:text-5xl text-3xl font-semibold">Recommended</h2>
             <img
               className="md:w-[200px] w-[100px]"
               src="https://ik.imagekit.io/8fgpvoiai/MoviePad/quotes%20marks_HD5Th9EWh.png?updatedAt=1704369615652"
