@@ -4,7 +4,6 @@ import service from "../services/service";
 import { useDispatch } from "react-redux";
 import { TiStarFullOutline } from "../icons/index";
 import { Link } from "react-router-dom";
-// import { useDispatch } from "react-redux";
 import { setMovieCategory } from "../store/categorySlice";
 import { updateStatus, clearStatus } from "../store/errorSlice";
 export default function Category() {
@@ -14,18 +13,10 @@ export default function Category() {
   function handleCategory(e, id) {
     document.querySelectorAll(".filter").forEach((filter) => {
       filter.classList.remove(
-        // "md:px-6",
-        // "px-3",
-        // "rounded-full",
-        // "py-1",
         "bg-slate-500"
       );
     });
     e.currentTarget.classList.add(
-      //   "md:px-6",
-      //   "px-3",
-      //   "rounded-full",
-      //   "py-1",
       "bg-slate-500"
     );
 
@@ -46,7 +37,6 @@ export default function Category() {
 
   useEffect(() => {
     const id = 28;
-    const genre = "Action";
     service
       .getMoviesListByCategories(id)
       .then((data) => {

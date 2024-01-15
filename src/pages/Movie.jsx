@@ -27,43 +27,26 @@ export default function Movie() {
   const isError = useSelector((state) => state.errorReducer.isError);
 
   useEffect(() => {
-    // const tempId = "603692";
     service
       .getMovieByID(movieID)
       .then((data) => {
-        // console.log("moivie data", data);
         if (data) {
           setMovie([data]);
         }
       })
       .catch((error) => {
-        // setPageLoader(false)
         if (error.message === "404") {
           setErrorPage(true);
-          // console.log(error.message);
         }
         dispatch(updateStatus(error.message));
         setTimeout(() => {
           dispatch(clearStatus());
         }, 3000);
       });
-    // console.log("movie id",movieID);
   }, [movieID]);
 
   useEffect(() => {
     if (movie) {
-      const tempId = "603692";
-      movie.map((data) => {
-        // console.log(data.release_date);
-        // console.log(new Date(data.release_date).getFullYear()); //year
-        // console.log(new Date(data.release_date).toLocaleString('default', {month:'long'}).toUpperCase());
-        // console.log(new Date(data.release_date).toLocaleString('default', {month:'long'}));
-        // console.log(data);
-      });
-      // console.log(`https://image.tmdb.org/t/p/original/${movie[0].backdrop_path}`)
-      // console.log(movie[0].backdrop_path)
-      // movie[0]
-
       service
         .getMovieVideo(movieID)
         .then((videos) => {
@@ -128,7 +111,6 @@ export default function Movie() {
     service
       .recommendedMovie(movieID)
       .then((data) => {
-        // console.log('recommended movie',data)
         setRecommendedMovie(data);
       })
       .catch((error) => {
@@ -140,7 +122,6 @@ export default function Movie() {
   }, []);
 
   useEffect(() => {
-    // console.log("recommendedMovie", movie);
     setPageLoader(false);
   }, [movie]);
 
@@ -150,7 +131,6 @@ export default function Movie() {
       for (let i = 0; i < arrayIds.length; i++) {
         for (let j = 0; j < genresList.length; j++) {
           if (genresList[j].id === arrayIds[i].id) {
-            // console.log('genresList[j].name',genresList[j].name)
             result.push(genresList[j].name);
           } else if (genresList[j].id === arrayIds[i]) {
             result.push(genresList[j].name);
@@ -164,7 +144,6 @@ export default function Movie() {
     }
   }
 
-  // if (movie.length > 0 && recommendedMovie.length > 0)
   if (!pageLoader && movie.length > 0) {
     return (
       <div
@@ -366,12 +345,6 @@ export default function Movie() {
                       ))}
                     </div>
 
-                    {/* <div>
-                    {" "}
-                    {getGenreName(data.genres)}
-                  </div> */}
-
-                    {/* <h3>Action,Science,Fiction</h3> */}
                     <h3>
                       {(data.runtime / 60).toFixed()} h {data.runtime % 60} m
                     </h3>
@@ -393,7 +366,7 @@ export default function Movie() {
           ))}
         </div>
 
-        {/* recomanded section */}
+        {/* recommended section */}
         <div
           className="h-screen z-[10] text-white py-10 flex flex-col justify-start items-center gap-20 "
           style={{ fontFamily: "Syne,sans-serif" }}
@@ -422,7 +395,6 @@ export default function Movie() {
               <>
                 {recommendedMovie.map((movie) =>
                   movie.backdrop_path ? (
-                    // <div
                     <HashLink
                       key={movie.id}
                       smooth
@@ -462,7 +434,6 @@ export default function Movie() {
                           <h1 className="w-full text-2xl font-bold">
                             {movie.title}
                           </h1>
-                          {/* <h1 className="w-full text-2xl font-bold">title</h1> */}
 
                           <h2>{`${
                             new Date(movie.release_date).getDay() + 1 < 10
@@ -478,7 +449,6 @@ export default function Movie() {
                             movie.release_date
                           ).getFullYear()}`}</h2>
 
-                          {/* <h2>data</h2> */}
 
                           {/* genres */}
                           <div className=" flex gap-4 items-center text-xs w-full font-bold">
@@ -488,24 +458,16 @@ export default function Movie() {
                               )
                             )}
 
-                            {/* {getGenreName(movie.genre_ids)} */}
                           </div>
-                          {/* <div className=" flex gap-4 items-center text-xs w-full font-bold">
-                        genres list
-                      </div> */}
 
                           <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
                             {movie.original_language}
                           </h2>
 
-                          {/* <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
-                        movie
-                      </h2> */}
                         </div>
                       </div>
                     </HashLink>
                   ) : (
-                    // </div>
                     <></>
                   )
                 )}

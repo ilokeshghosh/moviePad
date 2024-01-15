@@ -22,15 +22,11 @@
     @variants animation {
         @keyframes skeleton-loading {
             0% {
-                /* background-color: hsl(200, 20%, 70%); */
-
-                /* background-color: rgba(15,23,42,0.6); */
                 background-color: rgb(46, 64, 83);
                 
             }
 
             100% {
-                /* background-color: hsl(200, 20%, 95%); */
                 background-color: rgb(174, 182, 191);
             }
         }

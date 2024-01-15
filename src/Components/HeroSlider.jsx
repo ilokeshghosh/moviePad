@@ -18,9 +18,6 @@ export default function HeroSlider({ sliderData }) {
     return null;
   }
 
-  // useEffect(()=>{
-  // console.log("sliderdata", sliderData);
-  // },[slides])
 
   if (slides.length > 0) {
     return (
@@ -50,15 +47,11 @@ export default function HeroSlider({ sliderData }) {
                     <div
                       className={`absolute top-0  left-0 w-full h-full bg-center bg-cover bg-no-repeat `}
                       style={{
-                        // backgroundImage: `url( ${slide.banner})`,
                         backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.backdrop_path})`,
                         boxShadow: "inset 0px -200px 100px 0px rgb(2 6 23)",
                       }}
                     >
-                      {/* <img className="w-full h-full" src={`${slide.banner}`} alt="" /> */}
                     </div>
-                    {/* image card*/}
-                    {/* <Link className="z-10 border md:h-[400px] h-[300px]" to={`/movie/${slide.id}`}> */}
                     <Link
                       className="w-full  md:h-[400px] h-[300px] z-10 relative bg-center bg-cover bg-no-repeat flex flex-col justify-end py-4 items-center gap-9 bottom-8 md:bottom-0"
                       to={`/movie/${slide.id}`}
@@ -66,7 +59,6 @@ export default function HeroSlider({ sliderData }) {
                         backgroundImage: `url(https://image.tmdb.org/t/p/original/${slide.poster_path})`,
                       }}
                     ></Link>
-                    {/* </Link> */}
                   </>
                 )}
               </div>

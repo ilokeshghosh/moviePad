@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { MovieSlider } from "./";
 import service from "../services/service";
-import { SlPicture } from "../icons/index";
 import { useDispatch, useSelector } from "react-redux";
 import { updateStatus, clearStatus } from "../store/errorSlice";
 
@@ -69,8 +68,6 @@ export default function Trending() {
               <MovieSlider slideData={trendingMovies} />
             </>
           )}
-
-          {/* content loader container */}
         </div>
       </div>
     );

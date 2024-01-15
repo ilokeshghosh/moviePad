@@ -1,6 +1,6 @@
 export default function Construction() {
   return (
-    // wrappper
+    // wrapper
     <div className="bg-white relative h-screen w-screen overflow-hidden flex justify-center items-center">
       {/* video wrapper */}
       <div className=" border h-full w-full flex justify-center items-center">

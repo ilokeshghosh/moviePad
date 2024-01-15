@@ -25,11 +25,9 @@ export default function Movie() {
   const isError = useSelector((state) => state.errorReducer.isError);
 
   useEffect(() => {
-    // const tempId = "603692";
     service
       .getTvByID(seriesID)
       .then((data) => {
-        // console.log("series data", data);
         if (data) {
           setSeries([data]);
           setPageLoader(false);
@@ -38,30 +36,16 @@ export default function Movie() {
       .catch((error) => {
         if (error.message === "404") {
           setErrorPage(true);
-          // console.log(error.message);
         }
         dispatch(updateStatus(error.message));
         setTimeout(() => {
           dispatch(clearStatus());
         }, 3000);
       });
-    // console.log("movie id",movieID);
   }, [seriesID]);
 
   useEffect(() => {
     if (series) {
-      const tempId = "603692";
-      series.map((data) => {
-        // console.log(data.release_date);
-        // console.log(new Date(data.release_date).getFullYear()); //year
-        // console.log(new Date(data.release_date).toLocaleString('default', {month:'long'}).toUpperCase());
-        // console.log(new Date(data.release_date).toLocaleString('default', {month:'long'}));
-        // console.log(data);
-      });
-      // console.log(`https://image.tmdb.org/t/p/original/${movie[0].backdrop_path}`)
-      // console.log(movie[0].backdrop_path)
-      // movie[0]
-
       service
         .getTvVideo(seriesID)
         .then((videos) => {
@@ -126,13 +110,11 @@ export default function Movie() {
     service
       .recommendedTv(seriesID)
       .then((data) => {
-        // console.log('recommended movie',data)
         setRecommendedSeries(data);
       })
       .catch((error) => {
         if (error.message === "404") {
           setErrorPage(true);
-          // console.log(error.message);
         }
         dispatch(updateStatus(error.message));
         setTimeout(() => {
@@ -161,7 +143,7 @@ export default function Movie() {
     return result;
   }
 
-  // if (series.length > 0 && recommendedSeries.length > 0)
+
   if (!pageLoader && series.length > 0) {
     return (
       <div
@@ -248,19 +230,17 @@ export default function Movie() {
                           <a
                             className="flex gap-1"
                             target="_blank"
-                            href={`https://www.themoviedb.org/person/${
-                              cast.id
-                            }-${cast.name.toLowerCase()}`}
+                            href={`https://www.themoviedb.org/person/${cast.id
+                              }-${cast.name.toLowerCase()}`}
                           >
                             {cast.profile_path ? (
                               <>
                                 <img
                                   className="w-[26px] h-[30px]  rounded-full"
-                                  src={`${
-                                    cast.profile_path
+                                  src={`${cast.profile_path
                                       ? `https://image.tmdb.org/t/p/original/${cast.profile_path}`
                                       : ""
-                                  }`}
+                                    }`}
                                   alt=""
                                 />
                               </>
@@ -386,7 +366,6 @@ export default function Movie() {
                 {" "}
                 {recommendedSeries.map((data) =>
                   data.backdrop_path ? (
-                    // <div
                     <HashLink
                       key={data.id}
                       smooth
@@ -426,7 +405,7 @@ export default function Movie() {
                           <h1 className="w-full text-2xl font-bold">
                             {data.name}
                           </h1>
-                          {/* <h1 className="w-full text-2xl font-bold">title</h1> */}
+
 
                           <h2>
                             First Air On :{" "}
@@ -441,31 +420,21 @@ export default function Movie() {
                               )
                             )}
 
-                            {/* {getGenreName(data.genre_ids)} */}
                           </div>
-                          {/* <div className=" flex gap-4 items-center text-xs w-full font-bold">
-                        genres list
-                      </div> */}
-
                           <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
                             {data.original_language}
                           </h2>
-
-                          {/* <h2 className="text-lg font-bold tracking-widest bg-white/20 px-4 rounded-lg text-center">
-                        movie
-                      </h2> */}
                         </div>
                       </div>
                     </HashLink>
                   ) : (
-                    // </div>
+
                     <></>
                   )
                 )}
               </>
             )}
           </div>
-          {/* </div> */}
         </div>
       </div>
     );

@@ -20,8 +20,6 @@ export default function Search() {
   );
   const tvGenresList = useSelector((state) => state.categories.tvCategory);
 
-  // Exploring the unknown, but your query didn't light up the stars. Try another cosmic search or chart a new course!
-
   // checking for movie genres list
   useEffect(() => {
     if (movieGenresList.length <= 0) {
@@ -113,12 +111,6 @@ export default function Search() {
                 result.push(genre.name);
               }
             });
-
-        // const data = genresList.find((genre, index) => {
-        //   if (genre.id === id && genre.name) {
-        //     result.push(genre.name);
-        //   }
-        // });
       });
     }
     return result;
@@ -176,9 +168,6 @@ export default function Search() {
     }
   }
 
-  useEffect(() => {
-    // console.log('ho on',option)
-  }, [option]);
 
   return (
     <div
@@ -277,9 +266,9 @@ export default function Search() {
                   <div className="w-full flex  justify-start items-center ">
                     {/* rating section */}
                     <div className="relative">
-                      {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
+                    
                       <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
-                      {/* </TiStarFullOutline> */}
+
                       <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
                         {data.vote_average.toFixed(1)}
                       </h2>

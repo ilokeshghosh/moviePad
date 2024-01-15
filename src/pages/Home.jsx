@@ -1,5 +1,3 @@
-import Slider from "../Components/HeroSlider";
-import MovieSlider from "../Components/MovieSlider";
 import { NavHashLink } from "react-router-hash-link";
 import {
   Trending,
@@ -18,12 +16,10 @@ import {
   VscErrorSmall,
   IoMdSearch,
 } from "../icons/index";
-// import "./Home.css";
 import { useState, useEffect } from "react";
 import service from "../services/service";
 import { setMovieCategory, setTvCategory } from "../store/categorySlice";
 import { updateStatus, clearStatus } from "../store/errorSlice";
-// import Loader from "./Loader/Loader";
 import { Loader } from "./index";
 export default function Home() {
   const [heroSlider, setHeroSlider] = useState([]);
@@ -32,7 +28,6 @@ export default function Home() {
   const isError = useSelector((state) => state.errorReducer.isError);
   const dispatch = useDispatch();
 
-  // const [upcomingMovies, setUpcomingMovies] = useState([]);
   const [activeNavbar, setActiveNavbar] = useState({
     home: true,
     trending: false,
@@ -70,16 +65,6 @@ export default function Home() {
         }, 3000);
       });
 
-    // service.getMovieID("1112547").then((data) => {
-    //   console.log("data", data);
-    // });
-
-    // service.getUpcomingMovies().then((data) => {
-    //   if (data) {
-    //     setUpcomingMovies(data);
-    //   }
-    // });
-
     try {
       const localMovieCategoryData = localStorage.getItem("movieGenres");
       const localTvCategoryData = localStorage.getItem("tvGenres");
@@ -93,7 +78,6 @@ export default function Home() {
         }
       } else {
         service.getMovieCategoriesList().then((data) => {
-          // console.log('data re called')
           dispatch(setMovieCategory(data));
           localStorage.setItem("movieGenres", JSON.stringify(data));
         });
@@ -112,15 +96,12 @@ export default function Home() {
       }, 3000);
     }
 
-    // const url=`https://image.tmdb.org/t/p/original/${'wwemzKWzjKYJFfCeiB57q3r4Bcm.png'}`
-    // console.log('url',url);
   }, []);
 
-  // if (heroSlider.length > 0 )
+ 
   if (!pageLoader && heroSlider.length > 0) {
     return (
       <div
-        // id="home"
         className=" h-screen bg-slate-950 w-full overflow-y-auto no-scrollbar overflow-x-hidden"
         style={{ fontFamily: "Syne,sans-serif" }}
       >
@@ -163,8 +144,6 @@ export default function Home() {
             src="https://ik.imagekit.io/8fgpvoiai/MoviePad/logo_AJ6b_EJh1?updatedAt=1704817030405"
             alt=""
           />
-          {/* <h2 className="text-xl ">Logo Here</h2> */}
-
           {/* nav content */}
           <ul className="flex md:gap-10 gap-2 text-lg font-bold items-center  w-full md:w-[50%] justify-between px-5 md:px-0">
             <li>

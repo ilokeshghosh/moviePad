@@ -151,12 +151,6 @@ export default function TopRated() {
                 result.push(genre.name);
               }
             });
-
-        // const data = genresList.find((genre, index) => {
-        //   if (genre.id === id && genre.name) {
-        //     result.push(genre.name);
-        //   }
-        // });
       });
     }
     return result;
@@ -170,7 +164,6 @@ export default function TopRated() {
       >
         {/* background vectors */}
         <div className="">
-          <div className="absolute z-10 hidden top-[60%] border bg-slate-500  inline-block   -left-[15%] bg-center bg-no-repeat bg-cover h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
           <div className="absolute -bottom-[10%]   z-10   right-[2%] bg-center bg-no-repeat bg-cover  h-[900px]  w-[1000px] bg-[url(https://ik.imagekit.io/8fgpvoiai/MoviePad/background%20vector%202_W0k4aWxrl.png?updatedAt=1704195548285)]"></div>
         </div>
 
@@ -231,9 +224,7 @@ export default function TopRated() {
                   <div className="w-full flex  justify-start items-center ">
                     {/* rating section */}
                     <div className="relative">
-                      {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
                       <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
-                      {/* </TiStarFullOutline> */}
                       <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
                         {data.vote_average.toFixed(1)}
                       </h2>

@@ -8,12 +8,10 @@ import {
 } from "../icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { useDispatch } from "react-redux";
 import { setMovieCategory } from "../store/categorySlice";
 export default function MovieSlider({ slideData }) {
   const genresList = useSelector((state) => state.categories.movieCategory);
   const dispatch = useDispatch();
-  // const [slides, setSlides] = useState(data);
   const [slides, setSlides] = useState(slideData);
   const [current, setCurrent] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -22,10 +20,6 @@ export default function MovieSlider({ slideData }) {
   const [cardWidth, setCardWidth] = useState(
     window.innerWidth < 600 ? window.innerWidth : 400
   );
-  // const length = slides.length;
-
-  const imagesPerPageDesktop = 5;
-  const imagesPerPageMobile = 1;
 
   function previous() {
     const newCurrent = current - imagesPerPage;
@@ -39,7 +33,6 @@ export default function MovieSlider({ slideData }) {
   }
 
   function getImagesPerPage() {
-    // Determine the number of images to display based on screen width
     return window.innerWidth < 600 ? 1 : 5;
   }
 
@@ -118,13 +111,6 @@ export default function MovieSlider({ slideData }) {
     return result;
   }
 
-  useEffect(() => {
-    // console.log('est',slides);
-    // slides.map((slide)=>{
-    //   console.log('slide',new Date(slide.release_date).getDay());
-    // })
-  }, [slides]);
-
   if (slides.length > 0) {
     return (
       <div className="w-full relative h-full flex  items-end ">
@@ -157,19 +143,15 @@ export default function MovieSlider({ slideData }) {
           <div
             className={`w-full  flex items-center      justify-start   transition-transform duration-1000 ease-in-out `}
             style={{
-              transform: `translateX(-${
-                current * (100 / getImagesPerPage())
-              }%)`, // Adjust the translation based on the number of cards
-
-              // transform: `translateX(-${window.innerWidth<600? `${current * (100 / getImagesPerPage())}%`:''})`, // Adjust the translation based on the number of cards
+              transform: `translateX(-${current * (100 / getImagesPerPage())
+                }%)`,
             }}
           >
             {slides.map((slide, index) => (
               <div
                 key={index}
-                className={`${
-                  windowWidth < 600 ? "w-full" : `w-[${100 / imagesPerPage}%]`
-                }   flex-shrink-0  flex justify-center items-center selection:bg-transparent px-2`}
+                className={`${windowWidth < 600 ? "w-full" : `w-[${100 / imagesPerPage}%]`
+                  }   flex-shrink-0  flex justify-center items-center selection:bg-transparent px-2`}
               >
                 {index >= current && index <= current + imagesPerPage - 1 && (
                   <>
@@ -194,9 +176,7 @@ export default function MovieSlider({ slideData }) {
                         <div className="w-full flex  justify-start items-center ">
                           {/* rating section */}
                           <div className="relative">
-                            {/* <TiStarFullOutline className="text-yellow-500 text-6xl" /> */}
                             <TiStarFullOutline className="flex justify-center items-center text-6xl text-yellow-400 z-[-4]" />
-                            {/* </TiStarFullOutline> */}
                             <h2 className="text-black font-bold absolute top-[33%] left-[35%]">
                               {slide.vote_average.toFixed(1)}
                             </h2>
@@ -210,19 +190,16 @@ export default function MovieSlider({ slideData }) {
                             {slide.title}
                           </h1>
 
-                          <h2>{`${
-                            new Date(slide.release_date).getDay() + 1 < 10
+                          <h2>{`${new Date(slide.release_date).getDay() + 1 < 10
                               ? "0"
                               : ""
-                          }${new Date(slide.release_date).getDay() + 1} / ${
-                            new Date(slide.release_date).getMonth() + 1 < 10
+                            }${new Date(slide.release_date).getDay() + 1} / ${new Date(slide.release_date).getMonth() + 1 < 10
                               ? "0"
                               : ""
-                          }${
-                            new Date(slide.release_date).getMonth() + 1
-                          }/ ${new Date(
-                            slide.release_date
-                          ).getFullYear()}`}</h2>
+                            }${new Date(slide.release_date).getMonth() + 1
+                            }/ ${new Date(
+                              slide.release_date
+                            ).getFullYear()}`}</h2>
 
                           {/* genres */}
                           <div className="flex gap-4 items-center text-xs w-full font-bold">
